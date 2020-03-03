@@ -20,7 +20,8 @@ public class MainActivity extends AppCompatActivity
 
         // Button links to Login Page's screen.
         button = (Button) findViewById(R.id.LogIn);
-        button.setOnClickListener(new View.OnClickListener(){
+        button.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
