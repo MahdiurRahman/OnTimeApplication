@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,7 +16,6 @@ public class Login extends AppCompatActivity
     private Button button;
 
     EditText email, password;
-    private boolean rememberMe = false;
     CheckBox remember;
     Button login;
 
@@ -34,8 +35,15 @@ public class Login extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(view.getContext(), HomePage.class);
-                startActivity(intent);
+//                Intent i = getIntent();
+//                String user_name = i.getStringExtra("name");
+
+                if (validateFields())
+                {
+                    Intent intent = new Intent(view.getContext(), HomePage.class);
+                    startActivity(intent);
+                }
+                //intent.putExtra("name", user_name);
             }
         });
 
@@ -49,6 +57,32 @@ public class Login extends AppCompatActivity
                 forgotPass();
             }
         });
+    }
+
+    // This method of validating email is actually genius level lol. - Kevin
+    public static boolean validateEmail(CharSequence target)
+    {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+    private boolean validateFields()
+    {
+        int minimum_password_length = 8;
+
+        if (password.getText().length() < minimum_password_length)
+        {
+            password.setError("Minimum length of password is 8.");
+            return false;
+        }
+        else if (!validateEmail(email.getText()))
+        {
+            email.setError("Incorrect Email!");
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public void forgotPass()

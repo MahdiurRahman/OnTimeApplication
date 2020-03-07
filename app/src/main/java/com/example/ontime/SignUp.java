@@ -9,24 +9,27 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-public class ForgottenPassword extends AppCompatActivity
+public class SignUp extends AppCompatActivity
 {
-    Button cancel, submit;
-    EditText recover_pass;
+    EditText email, pass, name;
+    Button submit_button, cancel_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forgotten_password);
+        setContentView(R.layout.activity_sign_up);
 
-        cancel = findViewById(R.id.cancel_btn);
-        submit = findViewById(R.id.submit_btn);
-        recover_pass = findViewById(R.id.recover_password);
+        submit_button = findViewById(R.id.submit_btn);
+        cancel_button = findViewById(R.id.cancel_btn);
 
-        // Redirects to different screens on button press.
-        cancel.setOnClickListener(new View.OnClickListener()
+        email = findViewById(R.id.email_field);
+        pass = findViewById(R.id.pass_field);
+        name = findViewById(R.id.name_field);
+
+        submit_button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -34,17 +37,18 @@ public class ForgottenPassword extends AppCompatActivity
                 if (validateField())
                 {
                     Intent intent = new Intent(v.getContext(), Login.class);
+                    //intent.putExtra("name", user_name);
                     startActivity(intent);
                 }
             }
         });
 
-        submit.setOnClickListener(new View.OnClickListener()
+        cancel_button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent = new Intent(v.getContext(), HomePage.class);
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -58,9 +62,21 @@ public class ForgottenPassword extends AppCompatActivity
 
     private boolean validateField()
     {
-        if (!validateEmail(recover_pass.getText()))
+        int minimum_password_length = 8;
+
+        if (!validateEmail(email.getText()))
         {
-            recover_pass.setError("Enter a valid Email!");
+            email.setError("Enter a valid Email!");
+            return false;
+        }
+        else if (pass.getText().length() < minimum_password_length)
+        {
+            pass.setError("Minimum length of password is 8.");
+            return false;
+        }
+        else if (!name.getText().toString().matches("[a-z, A-Z]*"))
+        {
+            name.setError("Your name got numbers or symbols in it!");
             return false;
         }
         else
