@@ -9,7 +9,11 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity
 {
-    private Button button;
+    // Connect to db.
+    private static final String user = "";
+    private static final String pass = "";
+
+    private Button button, sign_up;
 
     // Creating the app.
     @Override
@@ -26,6 +30,17 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 loginPage();
+            }
+        });
+
+        sign_up = (Button) findViewById(R.id.SignUp);
+        sign_up.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(v.getContext(), SignUp.class);
+                startActivity(intent);
             }
         });
     }
