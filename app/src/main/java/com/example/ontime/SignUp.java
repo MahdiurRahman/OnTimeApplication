@@ -9,7 +9,6 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class SignUp extends AppCompatActivity
 {
@@ -22,8 +21,8 @@ public class SignUp extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        submit_button = findViewById(R.id.submit_btn);
-        cancel_button = findViewById(R.id.cancel_btn);
+        submit_button = findViewById(R.id.signup_submit_btn);
+        cancel_button = findViewById(R.id.signup_cancel_btn);
 
         email = findViewById(R.id.email_field);
         pass = findViewById(R.id.pass_field);
@@ -60,6 +59,7 @@ public class SignUp extends AppCompatActivity
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 
+
     private boolean validateField()
     {
         int minimum_password_length = 8;
@@ -72,6 +72,11 @@ public class SignUp extends AppCompatActivity
         else if (pass.getText().length() < minimum_password_length)
         {
             pass.setError("Minimum length of password is 8.");
+            return false;
+        }
+        else if (TextUtils.isEmpty(name.getText()))
+        {
+            name.setError("Enter in a name!");
             return false;
         }
         else if (!name.getText().toString().matches("[a-z, A-Z]*"))

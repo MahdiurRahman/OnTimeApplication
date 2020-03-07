@@ -69,14 +69,14 @@ public class Login extends AppCompatActivity
     {
         int minimum_password_length = 8;
 
-        if (password.getText().length() < minimum_password_length)
-        {
-            password.setError("Minimum length of password is 8.");
-            return false;
-        }
-        else if (!validateEmail(email.getText()))
+        if (!validateEmail(email.getText()))
         {
             email.setError("Incorrect Email!");
+            return false;
+        }
+        else if (password.getText().length() < minimum_password_length)
+        {
+            password.setError("Minimum length of password is 8.");
             return false;
         }
         else

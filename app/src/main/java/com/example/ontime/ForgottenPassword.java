@@ -22,7 +22,7 @@ public class ForgottenPassword extends AppCompatActivity
         setContentView(R.layout.activity_forgotten_password);
 
         cancel = findViewById(R.id.cancel_btn);
-        submit = findViewById(R.id.submit_btn);
+        submit = findViewById(R.id.signup_submit_btn);
         recover_pass = findViewById(R.id.recover_password);
 
         // Redirects to different screens on button press.
@@ -31,11 +31,8 @@ public class ForgottenPassword extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                if (validateField())
-                {
-                    Intent intent = new Intent(v.getContext(), Login.class);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(v.getContext(), Login.class);
+                startActivity(intent);
             }
         });
 
@@ -44,8 +41,11 @@ public class ForgottenPassword extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                Intent intent = new Intent(v.getContext(), HomePage.class);
-                startActivity(intent);
+                if (validateField())
+                {
+                    Intent intent = new Intent(v.getContext(), HomePage.class);
+                    startActivity(intent);
+                }
             }
         });
     }
