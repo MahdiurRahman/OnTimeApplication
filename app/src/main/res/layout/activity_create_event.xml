@@ -4,6 +4,189 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#cd252d"
     tools:context=".CreateEvent">
+
+    <Button
+        android:id="@+id/cancelCreateEventBtn"
+        android:layout_width="158dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginRight="44dp"
+        android:background="#00FFFFFF"
+        android:onClick="cancelCreateEvent"
+        android:text="@android:string/cancel"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <Button
+        android:id="@+id/createEventBtn"
+        android:layout_width="158dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="16dp"
+        android:background="#00000000"
+        android:onClick="createEvent"
+        android:text="Save"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/cancelCreateEventBtn"
+        app:layout_constraintHorizontal_bias="0.764"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="170dp"
+        android:layout_height="210dp"
+        android:layout_marginBottom="34dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="392dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="260dp"
+        android:layout_marginBottom="13dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="8dp">
+
+        <Button
+            android:id="@+id/button10"
+            android:layout_width="16dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="S" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="2dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="M" />
+
+        <Button
+            android:id="@+id/button9"
+            android:layout_width="6dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="F" />
+
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="7dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="T" />
+
+        <Button
+            android:id="@+id/button7"
+            android:layout_width="4dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="W" />
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="8dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="T" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="13dp"
+            android:layout_marginRight="13dp"
+            android:text="S" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="401dp"
+        android:layout_height="319dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.764"
+        tools:layout_editor_absoluteX="5dp">
+
+        <EditText
+            android:id="@+id/createEventStartLocation"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Starting point"
+            android:inputType="textPersonName"
+            android:singleLine="false"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventDestination"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Destination"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventStartTime"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Start time"
+            android:inputType="time"
+            android:singleLine="false"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventName"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Alarm name"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventAlarm"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Alarm sound"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventVibration"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Vibration"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
