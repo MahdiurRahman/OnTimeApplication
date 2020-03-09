@@ -40,74 +40,119 @@
         android:layout_width="170dp"
         android:layout_height="210dp"
         android:layout_marginBottom="34dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/daysOfWeek"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
+
     <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="392dp"
-        android:layout_height="41dp"
+        android:id="@+id/daysOfWeek"
+        android:layout_width="349dp"
+        android:layout_height="49dp"
         android:layout_marginTop="260dp"
-        android:layout_marginBottom="13dp"
+        android:layout_marginBottom="25dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="8dp">
+        app:layout_constraintVertical_bias="0.0">
 
-        <Button
-            android:id="@+id/button10"
-            android:layout_width="16dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="S" />
+        <ToggleButton
+            android:id="@+id/sunday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:checked="false"
+            android:text="S"
+            android:textColor="#000000"
+            android:textOff="S"
+            android:textOn="S"
+            android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="2dp"
-            android:layout_height="42dp"
-            android:layout_weight="1"
-            android:text="M" />
+        <ToggleButton
+            android:id="@+id/monday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:checked="false"
+            android:text="M"
+            android:textColor="#000000"
+            android:textColorLink="#FFFFFF"
+            android:textOff="M"
+            android:textOn="M"
+            android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/button9"
-            android:layout_width="6dp"
-            android:layout_height="42dp"
-            android:layout_weight="1"
-            android:text="F" />
+        <ToggleButton
+            android:id="@+id/tuesday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:text="T"
+            android:textColor="#000000"
+            android:textOff="T"
+            android:textOn="T"
+            android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/button8"
-            android:layout_width="7dp"
-            android:layout_height="42dp"
-            android:layout_weight="1"
-            android:text="T" />
+        <ToggleButton
+            android:id="@+id/wednesday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:text="W"
+            android:textColor="#000000"
+            android:textOff="W"
+            android:textOn="W"
+            android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="4dp"
-            android:layout_height="42dp"
-            android:layout_weight="1"
-            android:text="W" />
+        <ToggleButton
+            android:id="@+id/thursday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:text="T"
+            android:textColor="#000000"
+            android:textOff="T"
+            android:textOn="T"
+            android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/button6"
-            android:layout_width="8dp"
-            android:layout_height="42dp"
-            android:layout_weight="1"
-            android:text="T" />
+        <ToggleButton
+            android:id="@+id/friday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:text="F"
+            android:textColor="#000000"
+            android:textOff="F"
+            android:textOn="F"
+            android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="52dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="13dp"
-            android:layout_marginRight="13dp"
-            android:text="S" />
+        <ToggleButton
+            android:id="@+id/saturday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/toggle_bg"
+            android:text="S"
+            android:textColor="#000000"
+            android:textOff="S"
+            android:textOn="S"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
