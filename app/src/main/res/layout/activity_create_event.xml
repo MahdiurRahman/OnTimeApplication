@@ -4,6 +4,234 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#cd252d"
     tools:context=".CreateEvent">
+
+    <Button
+        android:id="@+id/cancelCreateEventBtn"
+        android:layout_width="158dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginRight="44dp"
+        android:background="#00FFFFFF"
+        android:onClick="cancelCreateEvent"
+        android:text="@android:string/cancel"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <Button
+        android:id="@+id/createEventBtn"
+        android:layout_width="158dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="16dp"
+        android:background="#00000000"
+        android:onClick="createEvent"
+        android:text="Save"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/cancelCreateEventBtn"
+        app:layout_constraintHorizontal_bias="0.764"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="170dp"
+        android:layout_height="210dp"
+        android:layout_marginBottom="34dp"
+        app:layout_constraintBottom_toTopOf="@+id/daysOfWeek"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <LinearLayout
+        android:id="@+id/daysOfWeek"
+        android:layout_width="349dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="260dp"
+        android:layout_marginBottom="25dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ToggleButton
+            android:id="@+id/sunday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:checked="false"
+            android:text="S"
+            android:textColor="#000000"
+            android:textOff="S"
+            android:textOn="S"
+            android:textSize="20sp" />
+
+        <ToggleButton
+            android:id="@+id/monday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:checked="false"
+            android:text="M"
+            android:textColor="#000000"
+            android:textColorLink="#FFFFFF"
+            android:textOff="M"
+            android:textOn="M"
+            android:textSize="20sp" />
+
+        <ToggleButton
+            android:id="@+id/tuesday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:text="T"
+            android:textColor="#000000"
+            android:textOff="T"
+            android:textOn="T"
+            android:textSize="20sp" />
+
+        <ToggleButton
+            android:id="@+id/wednesday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:text="W"
+            android:textColor="#000000"
+            android:textOff="W"
+            android:textOn="W"
+            android:textSize="20sp" />
+
+        <ToggleButton
+            android:id="@+id/thursday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:text="T"
+            android:textColor="#000000"
+            android:textOff="T"
+            android:textOn="T"
+            android:textSize="20sp" />
+
+        <ToggleButton
+            android:id="@+id/friday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toggle_bg"
+            android:text="F"
+            android:textColor="#000000"
+            android:textOff="F"
+            android:textOn="F"
+            android:textSize="20sp" />
+
+        <ToggleButton
+            android:id="@+id/saturday"
+            style="@style/toggleButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/toggle_bg"
+            android:text="S"
+            android:textColor="#000000"
+            android:textOff="S"
+            android:textOn="S"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="401dp"
+        android:layout_height="319dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.764"
+        tools:layout_editor_absoluteX="5dp">
+
+        <EditText
+            android:id="@+id/createEventStartLocation"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Starting point"
+            android:inputType="textPersonName"
+            android:singleLine="false"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventDestination"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Destination"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventStartTime"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Start time"
+            android:inputType="time"
+            android:singleLine="false"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventName"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Alarm name"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventAlarm"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Alarm sound"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventVibration"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Vibration"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

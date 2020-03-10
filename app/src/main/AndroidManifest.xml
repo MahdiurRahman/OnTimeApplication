@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SignUp"></activity>
-        <activity android:name=".CreateEvent" />
+        <activity android:name=".CreateEvent" android:screenOrientation="portrait" />
         <activity android:name=".HomePage" />
         <activity android:name=".ForgottenPassword" />
         <activity android:name=".Login" />
