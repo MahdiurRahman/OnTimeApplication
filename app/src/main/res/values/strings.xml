@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">OnTime</string>
+    <string name="navigation_open">Open navigation</string>
+    <string name="navigation_close">Close navigation</string>
 </resources>
