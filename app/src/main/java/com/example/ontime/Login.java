@@ -94,7 +94,8 @@ public class Login extends AppCompatActivity {
                     // Wrong credentials
                     // TODO: handle when there is an error on the backend logging in
                     else {
-                        Toast toast=Toast. makeText(getApplicationContext(),"Wrong username or password",Toast. LENGTH_SHORT);
+                        Toast wrongCredentials = Toast. makeText(getApplicationContext(),"Wrong username or password.", Toast. LENGTH_SHORT);
+                        wrongCredentials.show();
                     }
 
                 }
@@ -124,9 +125,9 @@ public class Login extends AppCompatActivity {
             email.setError("Incorrect Email!");
             return false;
         }
-        else if (password.getText().length() < minimum_password_length)
+        else if (password.getText().length() == 0)
         {
-            password.setError("Minimum length of password is 8.");
+            password.setError("Enter a password.");
             return false;
         }
         else
