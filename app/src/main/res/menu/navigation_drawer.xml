@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/invites"
+            android:title="Invites"
+            android:icon="@drawable/ic_mail_black_invite"/>
+
+        <item
+            android:id="@+id/notifications"
+            android:title="Notification"
+            android:icon="@drawable/ic_notifications_icon"/>
+
+        <item
+            android:id="@+id/private_event"
+            android:title="Private"
+            android:icon="@drawable/ic_event_black_icon"/>
+
+        <item
+            android:id="@+id/public_event"
+            android:title="Public"
+            android:icon="@drawable/ic_event_black_icon"/>
+    </group>
+
+    <item android:title="Account">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/change_password"
+                    android:title="Change Password"
+                    android:icon="@drawable/ic_lock_black_password"/>
+            </group>
+        </menu>
+
+    </item>
+
+
+    <item
+        android:id="@+id/log_out_homepage"
+        android:title="Log Out"
+        android:icon="@drawable/ic_reply_black_logout"/>
+
+</menu>
