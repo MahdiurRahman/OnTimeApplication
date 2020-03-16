@@ -7,7 +7,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +32,11 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
         add_event = findViewById(R.id.add_event_btn);
         user_name = findViewById(R.id.name_of_user);
+
+        // get logged in user's first name (saved during login)
+        SharedPreferences userInfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String firstName = userInfo.getString("firstName", "");
+        user_name.setText(firstName);
 
         // Menu variables.
         drawer_layout = findViewById(R.id.drawer_layout);
