@@ -3,7 +3,10 @@ package com.example.ontime;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.telephony.CarrierConfigManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -23,6 +26,9 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
+import java.util.prefs.PreferenceChangeEvent;
 
 public class Login extends AppCompatActivity {
     private Button button;
@@ -63,9 +69,9 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void loginUser(String email, String password) {
+    private void loginUser(final String email, String password) {
         // Put user's info into a JSON object
-        JSONObject userInfo = new JSONObject();
+        final JSONObject userInfo = new JSONObject();
         try {
             userInfo.put("email", email);
             userInfo.put("password", password);
@@ -81,22 +87,43 @@ public class Login extends AppCompatActivity {
         JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, url, userInfo, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    // TODO: handle different responses: wrong username/pw, successful login
-                    Log.i("Success", "" + response.toString());
+                Log.i("Success", "" + response.toString());
 
-                    // email/password correct
-                    if (response.has("user")) {
-                        // Redirect to the HomePage
-                        Intent intent = new Intent(Login.this, HomePage.class);
-                        startActivity(intent);
+                // Successful login
+                if (response.has("user")) {
+                    // Save user's information into SharedPreferences: data that is stored persistently and is available across all activities
+                    SharedPreferences userInfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor userInfoEditor = userInfo.edit();
+                    try {
+                        JSONObject userInfoJSON = (JSONObject) response.get("userInfo");
+                        String firstName = userInfoJSON.get("firstName").toString();
+                        String lastName = userInfoJSON.get("lastName").toString();
+                        Log.i("JSON", "" + firstName + " " + lastName);
+                        userInfoEditor.putString("email", email);
+                        userInfoEditor.putString("firstName", firstName);
+                        userInfoEditor.putString("lastName", lastName);
+                        userInfoEditor.commit();
+                        // TODO: when logging out, clear userInfo
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
 
-                    // Wrong credentials
-                    // TODO: handle when there is an error on the backend logging in
-                    else {
-                        Toast wrongCredentials = Toast. makeText(getApplicationContext(),"Wrong username or password.", Toast. LENGTH_SHORT);
-                        wrongCredentials.show();
-                    }
+                    // Redirect to the HomePage
+                    Intent intent = new Intent(Login.this, HomePage.class);
+                    startActivity(intent);
+                }
+
+                // Wrong credentials
+                else if (response.has("authError")) {
+                    Toast wrongCredentials = Toast. makeText(getApplicationContext(),"Wrong username or password.", Toast. LENGTH_SHORT);
+                    wrongCredentials.show();
+                }
+
+                // Login error (backend issue)
+                else {
+                    Toast error = Toast. makeText(getApplicationContext(),"There was an error logging in.", Toast. LENGTH_SHORT);
+                    error.show();
+                }
 
                 }
             }, new Response.ErrorListener() {
