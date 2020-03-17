@@ -99,6 +99,7 @@ public class Login extends AppCompatActivity {
                         String firstName = userInfoJSON.get("firstName").toString();
                         String lastName = userInfoJSON.get("lastName").toString();
                         Log.i("JSON", "" + firstName + " " + lastName);
+                        userInfoEditor.putBoolean("loggedIn", true);
                         userInfoEditor.putString("email", email);
                         userInfoEditor.putString("firstName", firstName);
                         userInfoEditor.putString("lastName", lastName);

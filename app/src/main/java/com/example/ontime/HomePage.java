@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,8 +27,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     NavigationView navigation_view;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
@@ -63,6 +64,16 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         });
     }
 
+    public void logout() {
+        Log.i("LOGOUT", "LOGGING OUT");
+        // remove all user preferences
+        PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().clear().apply();
+
+        // Navigate to MainActivity
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
@@ -85,7 +96,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 break;
 
             case (R.id.log_out_homepage):
-                break;
+                logout();
         }
 
         drawer_layout.closeDrawer(GravityCompat.START);
