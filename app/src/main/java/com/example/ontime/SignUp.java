@@ -30,8 +30,7 @@ public class SignUp extends AppCompatActivity
     Button submit_button, cancel_button;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
@@ -74,7 +73,6 @@ public class SignUp extends AppCompatActivity
             userInfo.put("password", pass.getText().toString());
             userInfo.put("firstName", firstName.getText().toString());
             userInfo.put("lastName", lastName.getText().toString());
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -90,23 +88,21 @@ public class SignUp extends AppCompatActivity
                 // If registration is successful, redirect to Login screen
                 if (response.has("email")) {
                     Log.i("Success", "" + response.toString());
-                    // Redirect to the Login screen
                     Intent intent = new Intent(SignUp.this, Login.class);
                     startActivity(intent);
                 }
 
-                // Wrong credentials
+                // Wrong credentials: show error
                 else if (response.has("duplicateUserError")) {
                     Toast userExistsError = Toast. makeText(getApplicationContext(),"A user with that email already exists.", Toast. LENGTH_SHORT);
                     userExistsError.show();
                 }
 
-                // Other registration error (backend issue)
+                // Other registration error (backend issue): show error
                 else {
                     Toast error = Toast. makeText(getApplicationContext(),"There was an error creating your account.", Toast. LENGTH_SHORT);
                     error.show();
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override

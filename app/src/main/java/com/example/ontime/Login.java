@@ -88,7 +88,6 @@ public class Login extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                 Log.i("Success", "" + response.toString());
-
                 // Successful login
                 if (response.has("user")) {
                     // Save user's information into SharedPreferences: data that is stored persistently and is available across all activities
@@ -104,11 +103,9 @@ public class Login extends AppCompatActivity {
                         userInfoEditor.putString("firstName", firstName);
                         userInfoEditor.putString("lastName", lastName);
                         userInfoEditor.commit();
-                        // TODO: when logging out, clear userInfo
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     // Redirect to the HomePage
                     Intent intent = new Intent(Login.this, HomePage.class);
                     startActivity(intent);
