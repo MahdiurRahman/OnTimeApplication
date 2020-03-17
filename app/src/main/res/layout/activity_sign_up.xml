@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.662"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_field" />
+        app:layout_constraintTop_toBottomOf="@+id/last_name_field" />
 
     <EditText
         android:id="@+id/email_field"
@@ -58,14 +58,33 @@
 
     <EditText
 
-        android:id="@+id/name_field"
+        android:id="@+id/last_name_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="31dp"
+        android:background="@android:color/white"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Enter Last Name"
+        android:inputType="textPersonName"
+        android:paddingHorizontal="30px"
+        android:paddingVertical="22px"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.449"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/first_name_field" />
+
+    <EditText
+
+        android:id="@+id/first_name_field"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:background="@android:color/white"
         android:ems="10"
         android:gravity="center"
-        android:hint="Enter Name"
+        android:hint="Enter First Name"
         android:inputType="textPersonName"
         android:paddingHorizontal="30px"
         android:paddingVertical="22px"
@@ -86,6 +105,6 @@
         android:text="Submit"
         android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_field" />
+        app:layout_constraintTop_toBottomOf="@+id/last_name_field" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
