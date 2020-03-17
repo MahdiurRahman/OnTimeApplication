@@ -3,16 +3,30 @@ package com.example.ontime;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SignUp extends AppCompatActivity
 {
-    EditText email, pass, name;
+    EditText email, pass, firstName, lastName;
     Button submit_button, cancel_button;
 
     @Override
@@ -26,19 +40,17 @@ public class SignUp extends AppCompatActivity
 
         email = findViewById(R.id.email_field);
         pass = findViewById(R.id.pass_field);
-        name = findViewById(R.id.name_field);
+        firstName = findViewById(R.id.first_name_field);
+        lastName = findViewById(R.id.last_name_field);
 
         submit_button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                if (validateField())
-                {
-                    Intent intent = new Intent(v.getContext(), Login.class);
-                    //intent.putExtra("name", user_name);
-                    startActivity(intent);
-                }
+            if (validateField()) {
+                signUp();
+            }
             }
         });
 
@@ -47,10 +59,64 @@ public class SignUp extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
-                startActivity(intent);
+            Intent intent = new Intent(v.getContext(), MainActivity.class);
+            startActivity(intent);
             }
         });
+    }
+
+
+    public void signUp() {
+        // Put user's info into a JSON object
+        final JSONObject userInfo = new JSONObject();
+        try {
+            userInfo.put("email", email.getText().toString());
+            userInfo.put("password", pass.getText().toString());
+            userInfo.put("firstName", firstName.getText().toString());
+            userInfo.put("lastName", lastName.getText().toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Instantiate the RequestQueue ***
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="http://10.0.2.2:8080/api/register";
+
+        // Request a string response from the provided URL.
+        JsonObjectRequest registrationRequest = new JsonObjectRequest(Request.Method.POST, url, userInfo, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                // If registration is successful, redirect to Login screen
+                if (response.has("email")) {
+                    Log.i("Success", "" + response.toString());
+                    // Redirect to the Login screen
+                    Intent intent = new Intent(SignUp.this, Login.class);
+                    startActivity(intent);
+                }
+
+                // Wrong credentials
+                else if (response.has("duplicateUserError")) {
+                    Toast userExistsError = Toast. makeText(getApplicationContext(),"A user with that email already exists.", Toast. LENGTH_SHORT);
+                    userExistsError.show();
+                }
+
+                // Other registration error (backend issue)
+                else {
+                    Toast error = Toast. makeText(getApplicationContext(),"There was an error creating your account.", Toast. LENGTH_SHORT);
+                    error.show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(registrationRequest);
     }
 
     // This method of validating email is actually genius level lol. - Kevin
@@ -74,14 +140,24 @@ public class SignUp extends AppCompatActivity
             pass.setError("Minimum length of password is 8.");
             return false;
         }
-        else if (TextUtils.isEmpty(name.getText()))
+        else if (TextUtils.isEmpty(firstName.getText()))
         {
-            name.setError("Enter in a name!");
+            firstName.setError("Enter in a name!");
             return false;
         }
-        else if (!name.getText().toString().matches("[a-z, A-Z]*"))
+        else if (!firstName.getText().toString().matches("[a-z, A-Z]*"))
         {
-            name.setError("Your name got numbers or symbols in it!");
+            firstName.setError("Your name can't have or symbols in it!");
+            return false;
+        }
+        else if (TextUtils.isEmpty(lastName.getText()))
+        {
+            lastName.setError("Enter in a name!");
+            return false;
+        }
+        else if (!lastName.getText().toString().matches("[a-z, A-Z]*"))
+        {
+            lastName.setError("Your name can't have numbers or symbols in it!");
             return false;
         }
         else

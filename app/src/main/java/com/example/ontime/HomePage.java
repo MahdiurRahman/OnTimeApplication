@@ -65,7 +65,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     public void logout() {
-        Log.i("LOGOUT", "LOGGING OUT");
         // remove all user preferences
         PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().clear().apply();
 
