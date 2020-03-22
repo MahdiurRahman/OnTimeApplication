@@ -79,7 +79,7 @@ public class SignUp extends AppCompatActivity
 
         // Instantiate the RequestQueue ***
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://10.0.2.2:8080/api/register";
+        String url ="https://fair-hallway-265819.appspot.com/api/register";
 
         // Request a string response from the provided URL.
         JsonObjectRequest registrationRequest = new JsonObjectRequest(Request.Method.POST, url, userInfo, new Response.Listener<JSONObject>() {
