@@ -95,13 +95,17 @@ public class Login extends AppCompatActivity {
                     SharedPreferences.Editor userInfoEditor = userInfo.edit();
                     try {
                         JSONObject userInfoJSON = (JSONObject) response.get("userInfo");
+                        JSONObject userJSON = (JSONObject) response.get("user");
                         String firstName = userInfoJSON.get("firstName").toString();
                         String lastName = userInfoJSON.get("lastName").toString();
-                        Log.i("JSON", "" + firstName + " " + lastName);
+                        String id = userJSON.get("id").toString();
+                        Log.i("user id", id);
                         userInfoEditor.putBoolean("loggedIn", true);
                         userInfoEditor.putString("email", email);
                         userInfoEditor.putString("firstName", firstName);
                         userInfoEditor.putString("lastName", lastName);
+                        userInfoEditor.putString("lastName", lastName);
+                        userInfoEditor.putString("id", id);
                         userInfoEditor.commit();
                     } catch (JSONException e) {
                         e.printStackTrace();

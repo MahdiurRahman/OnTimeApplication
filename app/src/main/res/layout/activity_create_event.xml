@@ -7,13 +7,14 @@
     android:background="#cd252d"
     tools:context=".CreateEvent">
 
+
     <Button
         android:id="@+id/cancelCreateEventBtn"
         android:layout_width="158dp"
         android:layout_height="65dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginRight="44dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
         android:background="#00FFFFFF"
         android:onClick="cancelCreateEvent"
         android:text="@android:string/cancel"
@@ -25,28 +26,120 @@
         android:id="@+id/createEventBtn"
         android:layout_width="158dp"
         android:layout_height="65dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="84dp"
         android:background="#00000000"
         android:onClick="createEvent"
         android:text="Save"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toStartOf="@+id/cancelCreateEventBtn"
-        app:layout_constraintHorizontal_bias="0.764"
+        app:layout_constraintHorizontal_bias="0.686"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createEventForm" />
 
-
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
-        android:layout_width="340dp"
-        android:layout_height="205dp"
+        android:layout_width="273dp"
+        android:layout_height="127dp"
         android:layout_marginBottom="34dp"
         app:layout_constraintBottom_toTopOf="@+id/daysOfWeek"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.347"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <LinearLayout
+        android:id="@+id/createEventForm"
+        android:layout_width="386dp"
+        android:layout_height="365dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.727"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.547">
+
+        <EditText
+            android:id="@+id/createEventLocation"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Event location"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventStartLocation"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Your start location"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventStartDate"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Start date (YYYY-MM-DD)"
+            android:inputType="date"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventEndDate"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+
+            android:hint="End date (YYYY-MM-DD)"
+            android:inputType="date"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventStartTime"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Start time (HH:MM:SS)"
+            android:inputType="time"
+            android:singleLine="false"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventName"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Alarm name"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/createEventAlarm"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginBottom="15dp"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:hint="Alarm sound"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/daysOfWeek"
@@ -59,7 +152,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.285">
+        app:layout_constraintVertical_bias="1.0">
 
         <ToggleButton
             android:id="@+id/sunday"
@@ -155,84 +248,26 @@
             android:textSize="20sp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/createEventForm"
-        android:layout_width="389dp"
-        android:layout_height="327dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <Switch
+        android:id="@+id/publicPrivateSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Make event public  "
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.792">
+        app:layout_constraintTop_toBottomOf="@+id/createEventForm" />
 
-        <EditText
-            android:id="@+id/createEventStartLocation"
-            android:layout_width="match_parent"
-            android:layout_height="39dp"
-            android:layout_marginBottom="15dp"
-            android:background="#FFFFFF"
-            android:ems="10"
-            android:hint="Starting point"
-            android:inputType="textPersonName"
-            android:singleLine="false"
-            android:textAlignment="center" />
-
-        <EditText
-            android:id="@+id/createEventDestination"
-            android:layout_width="match_parent"
-            android:layout_height="39dp"
-            android:layout_marginBottom="15dp"
-            android:background="#FFFFFF"
-            android:ems="10"
-            android:hint="Destination"
-            android:inputType="textPersonName"
-            android:textAlignment="center" />
-
-        <EditText
-            android:id="@+id/createEventStartTime"
-            android:layout_width="match_parent"
-            android:layout_height="39dp"
-            android:layout_marginBottom="15dp"
-            android:background="#FFFFFF"
-            android:ems="10"
-            android:hint="Start time"
-            android:inputType="time"
-            android:singleLine="false"
-            android:textAlignment="center" />
-
-        <EditText
-            android:id="@+id/createEventName"
-            android:layout_width="match_parent"
-            android:layout_height="39dp"
-            android:layout_marginBottom="15dp"
-            android:background="#FFFFFF"
-            android:ems="10"
-            android:hint="Alarm name"
-            android:inputType="textPersonName"
-            android:textAlignment="center" />
-
-        <EditText
-            android:id="@+id/createEventAlarm"
-            android:layout_width="match_parent"
-            android:layout_height="39dp"
-            android:layout_marginBottom="15dp"
-            android:background="#FFFFFF"
-            android:ems="10"
-            android:hint="Alarm sound"
-            android:inputType="textPersonName"
-            android:textAlignment="center" />
-
-        <EditText
-            android:id="@+id/createEventVibration"
-            android:layout_width="match_parent"
-            android:layout_height="39dp"
-            android:layout_marginBottom="15dp"
-            android:background="#FFFFFF"
-            android:ems="10"
-            android:hint="Vibration"
-            android:inputType="textPersonName"
-            android:textAlignment="center" />
-    </LinearLayout>
+    <Switch
+        android:id="@+id/repeatWeeklySwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Repeat weekly "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/publicPrivateSwitch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
