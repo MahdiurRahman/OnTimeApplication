@@ -64,7 +64,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         });
     }
 
-    public void logout() {
+    public void logout()
+    {
         // remove all user preferences
         PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().clear().apply();
 
@@ -81,21 +82,31 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             case (R.id.invites):
                 Intent intent = new Intent(HomePage.this, Invites.class);
                 startActivity(intent);
+                break;
 
             case (R.id.notifications):
+                intent = new Intent(HomePage.this, Notification.class);
+                startActivity(intent);
                 break;
 
             case (R.id.private_event):
+                intent = new Intent(HomePage.this, PrivateEvents.class);
+                startActivity(intent);
                 break;
 
             case (R.id.public_event):
+                intent = new Intent(HomePage.this, PublicEvents.class);
+                startActivity(intent);
                 break;
 
             case (R.id.change_password):
+                intent = new Intent(HomePage.this, ChangePassword.class);
+                startActivity(intent);
                 break;
 
             case (R.id.log_out_homepage):
                 logout();
+                break;
         }
 
         drawer_layout.closeDrawer(GravityCompat.START);
