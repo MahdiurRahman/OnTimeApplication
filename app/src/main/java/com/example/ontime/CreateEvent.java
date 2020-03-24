@@ -69,7 +69,7 @@ public class CreateEvent extends AppCompatActivity {
         EditText startTime = (EditText) findViewById(R.id.createEventStartTime);
         EditText eventLocation = (EditText) findViewById(R.id.createEventLocation);
         EditText alarmSound = (EditText) findViewById(R.id.createEventAlarm);
-        EditText vibration = (EditText) findViewById(R.id.createEventVibration);
+        //EditText vibration = (EditText) findViewById(R.id.createEventVibration);
         Switch publicPrivateSwitch = (Switch) findViewById(R.id.publicPrivateSwitch);
         Switch repeatWeeklySwitch = (Switch) findViewById(R.id.repeatWeeklySwitch);
 
@@ -87,44 +87,23 @@ public class CreateEvent extends AppCompatActivity {
         }
         String id = userInfo.getString("id", "0");
         Log.i("USER'S ID", id);
-        // check location
-/*
 
-+----------------+---------------+------+-----+---------+----------------+
-| Field          | Type          | Null | Key | Default | Extra          |
-+----------------+---------------+------+-----+---------+----------------+
-| id             | int(11)       | NO   | PRI | NULL    | auto_increment |
-| ownerId        | int(11)       | NO   | MUL | NULL    |                |
-| eventName      | varchar(255)  | YES  |     | NULL    |                |
-| startDate      | date          | NO   |     | NULL    |                |
-| endDate        | date          | NO   |     | NULL    |                |
-| repeatWeekly   | tinyint(1)    | NO   |     | NULL    |                |
-| weeklySchedule | varchar(7)    | YES  |     | NULL    |                |
-| time           | time          | NO   |     | NULL    |                |
-| locationName   | varchar(255)  | YES  |     | NULL    |                |
-| lat            | double(15,12) | NO   |     | NULL    |                |
-| lng            | double(15,12) | NO   |     | NULL    |                |
-| code           | varchar(255)  | YES  |     | NULL    |                |
-
-
- */
-        // at least 1 date must be checked
-        // all fields must have an entry
-        // make sure date and time is in the correct format
 
         try {
             newEvent.put("ownerId", id); //error bc string
             newEvent.put("eventName", name.getText().toString());
-            newEvent.put("startDate", startDate.getText().toString()); // parse on frontend or backend into string
-            newEvent.put("endDate", endDate.getText().toString()); // parse on frontend or backend into string
-            newEvent.put("repeatWeekly", repeatWeeklySwitch.isChecked()); //True: repeat weekly, False: not weekly
+            newEvent.put("startDate", startDate.getText().toString());
+            newEvent.put("endDate", endDate.getText().toString());
+            newEvent.put("repeatWeekly", repeatWeeklySwitch.isChecked());                   //True: repeat weekly, False: not weekly
             newEvent.put("weeklySchedule", getEventDays());
             newEvent.put("time", startTime.getText().toString());
-            //newEvent.put("startLocationName", startLocationName.getText().toString());      // creator's start location: needs to be handled on backend
+            newEvent.put("startLocationName", startLocationName.getText().toString());
             newEvent.put("locationName", eventLocation.getText().toString());               // event location
-            // when joining an event need to have a form for joining
+            // Temporary values until google api is implemented
             newEvent.put("lat", 1);
             newEvent.put("lng", 1);
+            newEvent.put("startLat", 1);
+            newEvent.put("startLng", 1);
             // lat
             // lng
             // TODO: save user's start location (will be saved for the event creator only)
@@ -136,9 +115,9 @@ public class CreateEvent extends AppCompatActivity {
 
         String url;
         if (publicPrivateSwitch.isChecked()) {
-            url = "http://10.0.2.2:8080/api/events/public";
+            url = "https://fair-hallway-265819.appspot.com/api/events/public";
         } else {
-            url = "http://10.0.2.2:8080/api/events/private";
+            url = "https://fair-hallway-265819.appspot.com/api/events/private";
         }
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -174,6 +153,11 @@ public class CreateEvent extends AppCompatActivity {
     }
 
     // TODO
+    // check location
+    // at least 1 date must be checked
+    // all fields must have an entry
+    // make sure date and time is in the correct format
+    // ...more
     boolean validateFields() {
         return true;
     }
