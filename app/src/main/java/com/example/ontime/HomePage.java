@@ -19,8 +19,10 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.nio.channels.InterruptedByTimeoutException;
+
 public class HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    Button add_event;
+    Button add_event, search_pub_event;
     TextView user_name;
 
     DrawerLayout drawer_layout;
@@ -33,6 +35,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
         add_event = findViewById(R.id.add_event_btn);
         user_name = findViewById(R.id.name_of_user);
+
+        search_pub_event = findViewById(R.id.search_public_events_button);
 
         // get logged in user's first name (saved during login)
         SharedPreferences userInfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -55,10 +59,17 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             @Override
             public void onClick(View v)
             {
-//                Intent i = getIntent();
-//                String name_of_user = i.getStringExtra("name");
                 Intent intent = new Intent(v.getContext(), CreateEvent.class);
-                //user_name.setText(name_of_user);
+                startActivity(intent);
+            }
+        });
+
+        search_pub_event.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(v.getContext(), SearchingPublicEvent.class);
                 startActivity(intent);
             }
         });
