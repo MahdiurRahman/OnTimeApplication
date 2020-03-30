@@ -41,20 +41,46 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
+// Move these out of this file
 class Event {
     String eventName;
     String startDate;
-    String endDate;
     String time;
-    String locationName;
+    String weeklySchedule;
+    // number of attendees?
 
-    Event(String eventName, String startDate, String endDate, String time, String locationName) {
+    Event(String eventName, String startDate, String weeklySchedule, String time) {
+        // convert weekly schedule from binary string to a list of days (1000110 -> Sun, Thu, Fri)
+        String days = "";
+        if (weeklySchedule.charAt(0) == '1') {
+            days += "Sun ";
+        }
+        if (weeklySchedule.charAt(1) == '1') {
+            days += "Mon ";
+        }
+        if (weeklySchedule.charAt(2) == '1') {
+            days += "Tue ";
+        }
+        if (weeklySchedule.charAt(3) == '1') {
+            days += "Wed ";
+        }
+        if (weeklySchedule.charAt(4) == '1') {
+            days += "Thu ";
+        }
+        if (weeklySchedule.charAt(5) == '1') {
+            days += "Fri ";
+        }
+        if (weeklySchedule.charAt(6) == '1') {
+            days += "Sat";
+        }
+        String shortDate = startDate.substring(0,9);
+
 
         this.eventName = eventName;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDate = shortDate;
         this.time = time;
-        this.locationName = locationName;
+        this.weeklySchedule = days;
     }
 }
 
@@ -75,6 +101,10 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
     @Override
     public void onBindViewHolder(EventViewHolder personViewHolder, int i) {
         personViewHolder.eventName.setText(events.get(i).eventName);
+        personViewHolder.startDate.setText(events.get(i).startDate);
+        personViewHolder.time.setText(events.get(i).time);
+        personViewHolder.weeklySchedule.setText(events.get(i).weeklySchedule);
+
     }
 
     @Override
@@ -91,16 +121,16 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
         CardView cv;
         TextView eventName;
         TextView startDate;
-        TextView endDate;
         TextView time;
-        TextView locationName;
+        TextView weeklySchedule;
 
         EventViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
             eventName = (TextView)itemView.findViewById(R.id.eventName);
-            // = (TextView)itemView.findViewById(R.id.person_age);
-            //personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
+            startDate = (TextView)itemView.findViewById(R.id.startDate);
+            time = (TextView)itemView.findViewById(R.id.time);
+            weeklySchedule = (TextView)itemView.findViewById(R.id.weeklySchedule);
         }
     }
 
@@ -127,10 +157,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         String firstName = userInfo.getString("firstName", "");
         user_name.setText(firstName);
 
-        Map<String, ?> allEntries = userInfo.getAll();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
-        }
 
         // populate the list view with user's cached events
         RecyclerView eventsListView = findViewById(R.id.eventsList);
@@ -156,10 +182,11 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 //create an Event object
                 String eventName = event.getString("eventName");
                 String startDate = event.getString("startDate");
-                String endDate = event.getString("endDate");
+                String weeklySchedule = event.getString("weeklySchedule");
                 String time = event.getString("time");
-                String locationName = event.getString("locationName");
-                eventList.add(new Event(eventName, startDate, endDate, time, locationName));
+                eventList.add(new Event(eventName, startDate, weeklySchedule, time));
+
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -169,7 +196,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
         RVAdapter adapter = new RVAdapter(eventList);
         eventsListView.setAdapter(adapter);
-
 
 
         // Menu variables.
