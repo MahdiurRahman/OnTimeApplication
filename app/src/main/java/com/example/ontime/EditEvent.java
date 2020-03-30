@@ -31,7 +31,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public class CreateEvent extends AppCompatActivity {
+public class EditEvent extends AppCompatActivity {
     public void cancelCreateEvent(View view) {
         // navigate back to homepage
         Intent intent = new Intent(this, HomePage.class);
@@ -61,7 +61,7 @@ public class CreateEvent extends AppCompatActivity {
         return daysString;
     }
 
-    public void createEvent() {
+    public void editEvent() {
         EditText name = (EditText) findViewById(R.id.createEventName);
         EditText startLocationName = (EditText) findViewById(R.id.createEventStartLocation);
         EditText startDate = (EditText) findViewById(R.id.createEventStartDate);
@@ -128,20 +128,20 @@ public class CreateEvent extends AppCompatActivity {
         JsonObjectRequest createEventRequest = new JsonObjectRequest(Request.Method.POST, url, newEvent, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-            Log.i("Success", "" + response.toString());
+                Log.i("Success", "" + response.toString());
 
-            // Event created successfully
-            if (response.has("ownerId")) {
-                // Redirect to the HomePage
-                Intent intent = new Intent(CreateEvent.this, HomePage.class);
-                startActivity(intent);
-            }
+                // Event created successfully
+                if (response.has("ownerId")) {
+                    // Redirect to the HomePage
+                    Intent intent = new Intent(EditEvent.this, HomePage.class);
+                    startActivity(intent);
+                }
 
-            // Error
-            else {
-                Toast error = Toast.makeText(getApplicationContext(), "There was an error creating the event.", Toast.LENGTH_SHORT);
-                error.show();
-            }
+                // Error
+                else {
+                    Toast error = Toast.makeText(getApplicationContext(), "There was an error creating the event.", Toast.LENGTH_SHORT);
+                    error.show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -167,15 +167,15 @@ public class CreateEvent extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_event);
-        Button createEvent = findViewById(R.id.createEventBtn);
+        setContentView(R.layout.activity_edit_event);
+        Button editEvent = findViewById(R.id.editEventBtn);
 
-        createEvent.setOnClickListener(new View.OnClickListener() {
+        editEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if (validateFields()) { // also check if location is valid
-                createEvent();
-            }
+                if (validateFields()) { // also check if location is valid
+                    editEvent();
+                }
             }
         });
     }
