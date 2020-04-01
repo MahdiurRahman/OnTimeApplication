@@ -101,16 +101,11 @@ public class CreateEvent extends AppCompatActivity {
             newEvent.put("time", startTime.getText().toString());
             newEvent.put("startLocationName", startLocationName.getText().toString());
             newEvent.put("locationName", eventLocation.getText().toString());               // event location
-            // Temporary values until google api is implemented
+            // Temporary values until google api is incorporated
             newEvent.put("lat", 1);
             newEvent.put("lng", 1);
             newEvent.put("startLat", 1);
             newEvent.put("startLng", 1);
-            // lat
-            // lng
-            // TODO: save user's start location (will be saved for the event creator only)
-            // will be different for user / event creator
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

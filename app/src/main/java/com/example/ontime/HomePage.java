@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -36,14 +37,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 
-// Move these out of this file
-class Event {
+// TODO: Move these out of this file
+class Event implements Serializable {
     String eventName;
     String startDate;
     String time;
@@ -76,7 +78,6 @@ class Event {
         }
         String shortDate = startDate.substring(0,9);
 
-
         this.eventName = eventName;
         this.startDate = shortDate;
         this.time = time;
@@ -94,17 +95,24 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item, viewGroup, false);
-        EventViewHolder pvh = new EventViewHolder(v);
-        return pvh;
+        EventViewHolder evh = new EventViewHolder(v);
+        return evh;
     }
 
     @Override
-    public void onBindViewHolder(EventViewHolder personViewHolder, int i) {
-        personViewHolder.eventName.setText(events.get(i).eventName);
-        personViewHolder.startDate.setText(events.get(i).startDate);
-        personViewHolder.time.setText(events.get(i).time);
-        personViewHolder.weeklySchedule.setText(events.get(i).weeklySchedule);
-
+    public void onBindViewHolder(EventViewHolder eventViewHolder, final int i) {
+        eventViewHolder.eventName.setText(events.get(i).eventName);
+        eventViewHolder.startDate.setText(events.get(i).startDate);
+        eventViewHolder.time.setText(events.get(i).time);
+        eventViewHolder.weeklySchedule.setText(events.get(i).weeklySchedule);
+        eventViewHolder.eventName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent editEvent = new Intent(v.getContext(), EditEvent.class);
+                editEvent.putExtra("event", events.get(i));
+                v.getContext().startActivity(editEvent);
+            }
+        });
     }
 
     @Override
@@ -185,8 +193,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 String weeklySchedule = event.getString("weeklySchedule");
                 String time = event.getString("time");
                 eventList.add(new Event(eventName, startDate, weeklySchedule, time));
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -196,6 +202,10 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
         RVAdapter adapter = new RVAdapter(eventList);
         eventsListView.setAdapter(adapter);
+
+        // TODO: format list items
+        // TODO: add searchbar
+        // TODO: make request to backend when homepage is loaded to get new events/event changes
 
 
         // Menu variables.
@@ -212,13 +222,9 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         add_event.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v)
-            {
-//                Intent i = getIntent();
-//                String name_of_user = i.getStringExtra("name");
-                Intent intent = new Intent(v.getContext(), CreateEvent.class);
-                //user_name.setText(name_of_user);
-                startActivity(intent);
+            public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), CreateEvent.class);
+            startActivity(intent);
             }
         });
     }

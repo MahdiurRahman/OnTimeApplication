@@ -170,6 +170,9 @@ public class EditEvent extends AppCompatActivity {
         setContentView(R.layout.activity_edit_event);
         Button editEvent = findViewById(R.id.editEventBtn);
 
+        Event event = (Event) getIntent().getSerializableExtra("event");
+        Log.i("event", event.eventName);
+
         editEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
