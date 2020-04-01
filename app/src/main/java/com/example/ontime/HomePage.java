@@ -52,11 +52,12 @@ class Event implements Serializable {
     String startDate;
     String time;
     Boolean repeatWeekly;
-    String weeklySchedule;
+    String weeklySchedule;  // binary string
     String locationName;
     Double lat;
     Double lng;
     String code;
+    String days;            // weekly schedule in days (Mon Tues etc)
     //number of attendees?
     // PRIVATE OR PUBLIC
 
@@ -90,7 +91,8 @@ class Event implements Serializable {
         this.eventName = eventName;
         this.startDate = shortDate;
         this.time = time;
-        this.weeklySchedule = days;
+        this.weeklySchedule = weeklySchedule;
+        this.days = days;
         this.id = id;
         this.ownerId = ownerId;
         this.repeatWeekly = repeatWeekly;
@@ -120,7 +122,7 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
         eventViewHolder.eventName.setText(events.get(i).eventName);
         eventViewHolder.startDate.setText(events.get(i).startDate);
         eventViewHolder.time.setText(events.get(i).time);
-        eventViewHolder.weeklySchedule.setText(events.get(i).weeklySchedule);
+        eventViewHolder.weeklySchedule.setText(events.get(i).days);
         eventViewHolder.eventName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

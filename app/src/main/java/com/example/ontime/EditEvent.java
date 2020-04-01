@@ -32,14 +32,13 @@ import org.json.JSONObject;
 import java.util.Map;
 
 public class EditEvent extends AppCompatActivity {
-
-
     public void cancelEditEvent(View view) {
         // navigate back to homepage
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
     }
 
+    //TODO
     public void validateForm(View view) {
 
     }
@@ -47,7 +46,7 @@ public class EditEvent extends AppCompatActivity {
     // TODO: move this function and the one from CreateEvent to a file and import it if possible
     // create string from days entered - in order "SMTWTFS". For example, if an event is on Tuesday, Wednesday, and Friday: 0011010
     public String getEventDays() {
-        LinearLayout daysOfWeek = (LinearLayout) findViewById(R.id.daysOfWeek);
+        LinearLayout daysOfWeek = (LinearLayout) findViewById(R.id.editDaysOfWeek);
         char[] eventDays = new char[7];
         for (int i = 0; i < 7; i++) {
             ToggleButton day = (ToggleButton) daysOfWeek.getChildAt(i);
@@ -196,8 +195,9 @@ public class EditEvent extends AppCompatActivity {
         //EditText vibration = (EditText) findViewById(R.id.editEventVibration);
         Switch publicPrivateSwitch = (Switch) findViewById(R.id.editPublicPrivateSwitch);
         Switch repeatWeeklySwitch = (Switch) findViewById(R.id.editRepeatWeeklySwitch);
+        LinearLayout daysOfWeek = (LinearLayout) findViewById(R.id.editDaysOfWeek);
 
-        // TODO: set all days
+        // TODO: set all days, get rest of fields
 
         // Get the event object passed to the activity
         Event event = (Event) getIntent().getSerializableExtra("event");
@@ -218,6 +218,17 @@ public class EditEvent extends AppCompatActivity {
         if (event.repeatWeekly == true) {
             repeatWeeklySwitch.setChecked(true);
         }
+
+Log.i("days", event.weeklySchedule);
+        // Set the days highlighted on top
+        for (int i = 0; i < 7; i++) {
+            ToggleButton day = (ToggleButton) daysOfWeek.getChildAt(i);
+            if (event.weeklySchedule.charAt(i) == '1') {
+                day.setChecked(true);
+            }
+        }
+
+
 
     }
 }
