@@ -46,13 +46,22 @@ import java.util.Map;
 
 // TODO: Move these out of this file
 class Event implements Serializable {
+    int id;
+    int ownerId;
     String eventName;
     String startDate;
     String time;
+    Boolean repeatWeekly;
     String weeklySchedule;
-    // number of attendees?
+    String locationName;
+    Double lat;
+    Double lng;
+    String code;
+    //number of attendees?
+    // PRIVATE OR PUBLIC
 
-    Event(String eventName, String startDate, String weeklySchedule, String time) {
+
+    Event(int id, int ownerId, String eventName, String startDate, String weeklySchedule, String time, Boolean repeatWeekly, String locationName, Double lat, Double lng, String code) {
         // convert weekly schedule from binary string to a list of days (1000110 -> Sun, Thu, Fri)
         String days = "";
         if (weeklySchedule.charAt(0) == '1') {
@@ -82,6 +91,13 @@ class Event implements Serializable {
         this.startDate = shortDate;
         this.time = time;
         this.weeklySchedule = days;
+        this.id = id;
+        this.ownerId = ownerId;
+        this.repeatWeekly = repeatWeekly;
+        this.locationName = locationName;
+        this.lat = lat;
+        this.lng = lng;
+        this.code = code;
     }
 }
 
@@ -171,8 +187,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
         eventsListView.setLayoutManager(llm);
 
-
-
         String eventsString = userInfo.getString("events", null);
 
         JSONArray eventsList = new JSONArray();
@@ -192,7 +206,15 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 String startDate = event.getString("startDate");
                 String weeklySchedule = event.getString("weeklySchedule");
                 String time = event.getString("time");
-                eventList.add(new Event(eventName, startDate, weeklySchedule, time));
+                int id = event.getInt("id");
+                int ownerId = event.getInt("ownerId");
+                //Boolean repeatWeekly = (Boolean) event.getBoolean("repeatWeekly");
+                Boolean repeatWeekly = true;
+                String locationName = event.getString("locationName");
+                Double lat = event.getDouble("lat");
+                Double lng = event.getDouble("lng");
+                String code = event.getString("code");
+                eventList.add(new Event(id, ownerId, eventName, startDate, weeklySchedule, time, repeatWeekly, locationName, lat, lng, code));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -206,7 +228,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         // TODO: format list items
         // TODO: add searchbar
         // TODO: make request to backend when homepage is loaded to get new events/event changes
-
+        // TODO: also update cache when events are edited or created?
 
         // Menu variables.
         drawer_layout = findViewById(R.id.drawer_layout);
@@ -219,8 +241,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
         navigation_view.setNavigationItemSelectedListener(this);
 
-        add_event.setOnClickListener(new View.OnClickListener()
-        {
+        add_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             Intent intent = new Intent(v.getContext(), CreateEvent.class);
@@ -239,10 +260,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
             case (R.id.invites):
                 Intent intent = new Intent(HomePage.this, Invites.class);
                 startActivity(intent);
@@ -272,9 +291,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 logout();
                 break;
         }
-
         drawer_layout.closeDrawer(GravityCompat.START);
-
         return true;
     }
 }

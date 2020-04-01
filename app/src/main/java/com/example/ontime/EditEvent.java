@@ -32,7 +32,9 @@ import org.json.JSONObject;
 import java.util.Map;
 
 public class EditEvent extends AppCompatActivity {
-    public void cancelCreateEvent(View view) {
+
+
+    public void cancelEditEvent(View view) {
         // navigate back to homepage
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
@@ -42,6 +44,7 @@ public class EditEvent extends AppCompatActivity {
 
     }
 
+    // TODO: move this function and the one from CreateEvent to a file and import it if possible
     // create string from days entered - in order "SMTWTFS". For example, if an event is on Tuesday, Wednesday, and Friday: 0011010
     public String getEventDays() {
         LinearLayout daysOfWeek = (LinearLayout) findViewById(R.id.daysOfWeek);
@@ -62,17 +65,16 @@ public class EditEvent extends AppCompatActivity {
     }
 
     public void editEvent() {
-        EditText name = (EditText) findViewById(R.id.createEventName);
-        EditText startLocationName = (EditText) findViewById(R.id.createEventStartLocation);
-        EditText startDate = (EditText) findViewById(R.id.createEventStartDate);
-        EditText endDate = (EditText) findViewById(R.id.createEventEndDate);
-        EditText startTime = (EditText) findViewById(R.id.createEventStartTime);
-        EditText eventLocation = (EditText) findViewById(R.id.createEventLocation);
-        EditText alarmSound = (EditText) findViewById(R.id.createEventAlarm);
-        //EditText vibration = (EditText) findViewById(R.id.createEventVibration);
-        Switch publicPrivateSwitch = (Switch) findViewById(R.id.publicPrivateSwitch);
-        Switch repeatWeeklySwitch = (Switch) findViewById(R.id.repeatWeeklySwitch);
-
+        EditText name = (EditText) findViewById(R.id.editEventName);
+        EditText startLocationName = (EditText) findViewById(R.id.editEventStartLocation);
+        EditText startDate = (EditText) findViewById(R.id.editEventStartDate);
+        EditText endDate = (EditText) findViewById(R.id.editEventEndDate);
+        EditText startTime = (EditText) findViewById(R.id.editEventStartTime);
+        EditText eventLocation = (EditText) findViewById(R.id.editEventLocation);
+        EditText alarmSound = (EditText) findViewById(R.id.editEventAlarm);
+        //EditText vibration = (EditText) findViewById(R.id.editEventVibration);
+        Switch publicPrivateSwitch = (Switch) findViewById(R.id.editPublicPrivateSwitch);
+        Switch repeatWeeklySwitch = (Switch) findViewById(R.id.editRepeatWeeklySwitch);
         // TODO: add validation for form, select different input types for form
         // TODO: add map
         // TODO: owner id
@@ -170,9 +172,6 @@ public class EditEvent extends AppCompatActivity {
         setContentView(R.layout.activity_edit_event);
         Button editEvent = findViewById(R.id.editEventBtn);
 
-        Event event = (Event) getIntent().getSerializableExtra("event");
-        Log.i("event", event.eventName);
-
         editEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,6 +180,45 @@ public class EditEvent extends AppCompatActivity {
                 }
             }
         });
+
+
+        setFormFields();
+    }
+
+    private void setFormFields() {
+        EditText name = (EditText) findViewById(R.id.editEventName);
+        EditText startLocationName = (EditText) findViewById(R.id.editEventStartLocation);
+        EditText startDate = (EditText) findViewById(R.id.editEventStartDate);
+        EditText endDate = (EditText) findViewById(R.id.editEventEndDate);
+        EditText startTime = (EditText) findViewById(R.id.editEventStartTime);
+        EditText eventLocation = (EditText) findViewById(R.id.editEventLocation);
+        EditText alarmSound = (EditText) findViewById(R.id.editEventAlarm);
+        //EditText vibration = (EditText) findViewById(R.id.editEventVibration);
+        Switch publicPrivateSwitch = (Switch) findViewById(R.id.editPublicPrivateSwitch);
+        Switch repeatWeeklySwitch = (Switch) findViewById(R.id.editRepeatWeeklySwitch);
+
+        // TODO: set all days
+
+        // Get the event object passed to the activity
+        Event event = (Event) getIntent().getSerializableExtra("event");
+        Log.i("event", event.eventName);
+
+        // Set each field in the form with the current values for the event
+        name.setText(event.eventName);
+
+        //startLocationName.setText(event.startLocation);
+        //startLocationName.setText(event.);
+        startDate.setText(event.startDate);
+
+        //endDate.setText(event.end);
+        startTime.setText(event.time);
+        eventLocation.setText(event.locationName);
+        //alarmSound
+        // private or public
+        if (event.repeatWeekly == true) {
+            repeatWeeklySwitch.setChecked(true);
+        }
+
     }
 }
 
