@@ -85,7 +85,7 @@ public class Login extends AppCompatActivity {
 
         // Instantiate the RequestQueue ***
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://fair-hallway-265819.appspot.com/api/login";
+        String url ="http://10.0.2.2:8080/api/login";
 
         // Request a string response from the provided URL.
         JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, url, userInfo, new Response.Listener<JSONObject>() {
@@ -100,12 +100,11 @@ public class Login extends AppCompatActivity {
                     try {
                         JSONObject userInfoJSON = (JSONObject) response.get("userInfo");
                         JSONObject userJSON = (JSONObject) response.get("user");
-                        JSONArray userEvents = response.getJSONArray("userEvents");
+                        JSONObject userEvents = (JSONObject) response.get("events");
+                        JSONArray privateEventsList = userEvents.getJSONArray("private");
 
                         // Convert the array of event objects into a string so that it can be stored in SharedPreferences
-                        //String events = new Gson().toJson(userEvents);
-                        String events = userEvents.toString();
-
+                        String events = privateEventsList.toString();
 
                         String firstName = userInfoJSON.get("firstName").toString();
                         String lastName = userInfoJSON.get("lastName").toString();
@@ -117,7 +116,8 @@ public class Login extends AppCompatActivity {
                         userInfoEditor.putString("lastName", lastName);
                         userInfoEditor.putString("lastName", lastName);
                         userInfoEditor.putString("id", id);
-                        userInfoEditor.putString("events", events);
+                        userInfoEditor.putString("privateEvents", events);
+                        //public events
                         userInfoEditor.commit();
                     } catch (JSONException e) {
                         e.printStackTrace();

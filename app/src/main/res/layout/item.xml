@@ -5,42 +5,43 @@
     android:layout_height="wrap_content"
     android:id="@+id/cv"
     >
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        >
+        android:background="#cd252d"
+        android:padding="16dp">
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/eventName"
-            android:layout_alignParentTop="true"
-            android:textSize="15sp"
-            />
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:textSize="15sp" />
+
+        <TextView
             android:id="@+id/startDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:textSize="15sp"
             android:layout_toRightOf="@+id/eventName"
-            />
+            android:textSize="15sp" />
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/time"
-            android:layout_alignParentTop="true"
-            android:textSize="15sp"
-            android:layout_toRightOf="@+id/startDate"
-            />
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/weeklySchedule"
             android:layout_alignParentTop="true"
-            android:textSize="15sp"
+            android:layout_toRightOf="@+id/startDate"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/weeklySchedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/time"
-            />
+            android:textSize="15sp" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

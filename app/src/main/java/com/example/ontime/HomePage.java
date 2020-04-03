@@ -50,6 +50,7 @@ class Event implements Serializable {
     int ownerId;
     String eventName;
     String startDate;
+    String endDate;
     String time;
     Boolean repeatWeekly;
     String weeklySchedule;  // binary string
@@ -58,11 +59,12 @@ class Event implements Serializable {
     Double lng;
     String code;
     String days;            // weekly schedule in days (Mon Tues etc)
+    Boolean isPrivate;
     //number of attendees?
     // PRIVATE OR PUBLIC
 
 
-    Event(int id, int ownerId, String eventName, String startDate, String weeklySchedule, String time, Boolean repeatWeekly, String locationName, Double lat, Double lng, String code) {
+    Event(int id, int ownerId, String eventName, String startDate, String endDate, String weeklySchedule, String time, Boolean repeatWeekly, String locationName, Double lat, Double lng, String code, Boolean isPrivate) {
         // convert weekly schedule from binary string to a list of days (1000110 -> Sun, Thu, Fri)
         String days = "";
         if (weeklySchedule.charAt(0) == '1') {
@@ -90,6 +92,7 @@ class Event implements Serializable {
 
         this.eventName = eventName;
         this.startDate = shortDate;
+        this.endDate = endDate;
         this.time = time;
         this.weeklySchedule = weeklySchedule;
         this.days = days;
@@ -100,6 +103,7 @@ class Event implements Serializable {
         this.lat = lat;
         this.lng = lng;
         this.code = code;
+        this.isPrivate = isPrivate;
     }
 }
 
@@ -189,7 +193,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
         eventsListView.setLayoutManager(llm);
 
-        String eventsString = userInfo.getString("events", null);
+        String eventsString = userInfo.getString("privateEvents", null);
 
         JSONArray eventsList = new JSONArray();
         try {
@@ -216,7 +220,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 Double lat = event.getDouble("lat");
                 Double lng = event.getDouble("lng");
                 String code = event.getString("code");
-                eventList.add(new Event(id, ownerId, eventName, startDate, weeklySchedule, time, repeatWeekly, locationName, lat, lng, code));
+                String endDate = event.getString("endDate");
+                eventList.add(new Event(id, ownerId, eventName, startDate, endDate, weeklySchedule, time, repeatWeekly, locationName, lat, lng, code, true));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

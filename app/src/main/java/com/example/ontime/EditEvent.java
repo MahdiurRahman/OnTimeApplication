@@ -31,7 +31,22 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
+
 public class EditEvent extends AppCompatActivity {
+
+    EditText name;
+    EditText startLocationName;
+    EditText startDate;
+    EditText endDate;
+    EditText startTime;
+    EditText eventLocation;
+    EditText alarmSound;
+    //EditText vibration;
+    Switch publicPrivateSwitch;
+    Switch repeatWeeklySwitch;
+    LinearLayout daysOfWeek;
+
+
     public void cancelEditEvent(View view) {
         // navigate back to homepage
         Intent intent = new Intent(this, HomePage.class);
@@ -64,63 +79,80 @@ public class EditEvent extends AppCompatActivity {
     }
 
     public void editEvent() {
-        EditText name = (EditText) findViewById(R.id.editEventName);
-        EditText startLocationName = (EditText) findViewById(R.id.editEventStartLocation);
-        EditText startDate = (EditText) findViewById(R.id.editEventStartDate);
-        EditText endDate = (EditText) findViewById(R.id.editEventEndDate);
-        EditText startTime = (EditText) findViewById(R.id.editEventStartTime);
-        EditText eventLocation = (EditText) findViewById(R.id.editEventLocation);
-        EditText alarmSound = (EditText) findViewById(R.id.editEventAlarm);
-        //EditText vibration = (EditText) findViewById(R.id.editEventVibration);
-        Switch publicPrivateSwitch = (Switch) findViewById(R.id.editPublicPrivateSwitch);
-        Switch repeatWeeklySwitch = (Switch) findViewById(R.id.editRepeatWeeklySwitch);
+
         // TODO: add validation for form, select different input types for form
-        // TODO: add map
-        // TODO: owner id
 
         // Get value from each input and put into json object
         // Put user's info into a JSON object
         final JSONObject newEvent = new JSONObject();
         SharedPreferences userInfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-/*      See what is in the userInfo object in sharedPreferences
-        Map<String, ?> allEntries = userInfo.getAll();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
-        }
-  */
-        String id = userInfo.getString("id", "0");
-        Log.i("USER'S ID", id);
+        Event event = (Event) getIntent().getSerializableExtra("event");
 
+        // Compare each value to the event's current value. Add the fields that have changed to the JSON object changes.
+        final JSONObject changes = new JSONObject();
 
         try {
-            newEvent.put("ownerId", id); //error bc string
-            newEvent.put("eventName", name.getText().toString());
-            newEvent.put("startDate", startDate.getText().toString());
-            newEvent.put("endDate", endDate.getText().toString());
-            newEvent.put("repeatWeekly", repeatWeeklySwitch.isChecked());                   //True: repeat weekly, False: not weekly
-            newEvent.put("weeklySchedule", getEventDays());
-            newEvent.put("time", startTime.getText().toString());
-            newEvent.put("startLocationName", startLocationName.getText().toString());
-            newEvent.put("locationName", eventLocation.getText().toString());               // event location
-            // Temporary values until google api is implemented
-            newEvent.put("lat", 1);
-            newEvent.put("lng", 1);
-            newEvent.put("startLat", 1);
-            newEvent.put("startLng", 1);
-            // lat
-            // lng
-            // TODO: save user's start location (will be saved for the event creator only)
-            // will be different for user / event creator
+            if (name.getText().toString() != event.eventName) {
+                changes.put("eventName", name.getText().toString());
+            }
+            if (startDate.getText().toString() != event.startDate) {
+                changes.put("startDate", startDate.getText().toString());
+            }
+            if (repeatWeeklySwitch.isChecked() != event.repeatWeekly) {
+                changes.put("repeatWeekly", repeatWeeklySwitch.isChecked());
+            }
+            String eventDays = getEventDays();
+            if (eventDays != event.weeklySchedule) {
+                changes.put("weeklySchedule", eventDays);
+            }
+            if (startTime.getText().toString() != event.time) {
+                changes.put("time", startTime.getText().toString());
+            }
+            if (eventLocation.getText().toString() != event.locationName) {
+                changes.put("locationName", eventLocation.getText().toString());
+                // TODO: if location is updated, lat and lng should be too
+                //newEvent.put("lat", 1);
+                //newEvent.put("lng", 1);
+            }
 
+            if (endDate.getText().toString() != event.endDate) {
+                changes.put("endDate", endDate.getText().toString());
+            }
+
+            // alarm sound
+            //public/private
+            //if (endDate.getText().toString() != event.endDate) {
+            //    changes.put("endDate", endDate.getText().toString());
+            //}
+
+            //if (startLocationName.getText().toString() != event.) {
+            //    changes.put("startLocationName", startLocationName.getText().toString());
+            //}
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        }
+
+        // event location
+        // Temporary values until google api is implemented
+
+        //newEvent.put("startLat", 1);
+        //newEvent.put("startLng", 1);
+
+        try {
+            String id = userInfo.getString("id", "0");
+            newEvent.put("ownerId", id);
+            newEvent.put("eventId", id);
+            newEvent.put("changes", changes);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         String url;
-        if (publicPrivateSwitch.isChecked()) {
-            url = "https://fair-hallway-265819.appspot.com/api/events/public";
+        // TODO: This needs to change, it should look at if the event is public or private already
+        if (event.isPrivate) {
+            url = "http://10.0.2.2:8080/api/events/public/edit";
         } else {
-            url = "https://fair-hallway-265819.appspot.com/api/events/private";
+            url = "http://10.0.2.2:8080/api/events/private/edit";
         }
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -171,12 +203,24 @@ public class EditEvent extends AppCompatActivity {
         setContentView(R.layout.activity_edit_event);
         Button editEvent = findViewById(R.id.editEventBtn);
 
+        name = (EditText) findViewById(R.id.editEventName);
+        startLocationName = (EditText) findViewById(R.id.editEventStartLocation);
+        startDate = (EditText) findViewById(R.id.editEventStartDate);
+        endDate = (EditText) findViewById(R.id.editEventEndDate);
+        startTime = (EditText) findViewById(R.id.editEventStartTime);
+        eventLocation = (EditText) findViewById(R.id.editEventLocation);
+        alarmSound = (EditText) findViewById(R.id.editEventAlarm);
+        //vibration = (EditText) findViewById(R.id.editEventVibration);
+        publicPrivateSwitch = (Switch) findViewById(R.id.editPublicPrivateSwitch);
+        repeatWeeklySwitch = (Switch) findViewById(R.id.editRepeatWeeklySwitch);
+        daysOfWeek = (LinearLayout) findViewById(R.id.editDaysOfWeek);
+
         editEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validateFields()) { // also check if location is valid
-                    editEvent();
-                }
+            if (validateFields()) { // also check if location is valid
+                editEvent();
+            }
             }
         });
 
@@ -185,20 +229,6 @@ public class EditEvent extends AppCompatActivity {
     }
 
     private void setFormFields() {
-        EditText name = (EditText) findViewById(R.id.editEventName);
-        EditText startLocationName = (EditText) findViewById(R.id.editEventStartLocation);
-        EditText startDate = (EditText) findViewById(R.id.editEventStartDate);
-        EditText endDate = (EditText) findViewById(R.id.editEventEndDate);
-        EditText startTime = (EditText) findViewById(R.id.editEventStartTime);
-        EditText eventLocation = (EditText) findViewById(R.id.editEventLocation);
-        EditText alarmSound = (EditText) findViewById(R.id.editEventAlarm);
-        //EditText vibration = (EditText) findViewById(R.id.editEventVibration);
-        Switch publicPrivateSwitch = (Switch) findViewById(R.id.editPublicPrivateSwitch);
-        Switch repeatWeeklySwitch = (Switch) findViewById(R.id.editRepeatWeeklySwitch);
-        LinearLayout daysOfWeek = (LinearLayout) findViewById(R.id.editDaysOfWeek);
-
-        // TODO: set all days, get rest of fields
-
         // Get the event object passed to the activity
         Event event = (Event) getIntent().getSerializableExtra("event");
         Log.i("event", event.eventName);
@@ -206,20 +236,21 @@ public class EditEvent extends AppCompatActivity {
         // Set each field in the form with the current values for the event
         name.setText(event.eventName);
 
-        //startLocationName.setText(event.startLocation);
-        //startLocationName.setText(event.);
         startDate.setText(event.startDate);
-
-        //endDate.setText(event.end);
+        endDate.setText(event.endDate);
         startTime.setText(event.time);
         eventLocation.setText(event.locationName);
+
         //alarmSound
-        // private or public
+        // TODO: change event to private or public
+        //startLocationName.setText(event.startLocation);
+
+        // TODO: I think this is broken
         if (event.repeatWeekly == true) {
             repeatWeeklySwitch.setChecked(true);
         }
 
-Log.i("days", event.weeklySchedule);
+        Log.i("days", event.weeklySchedule);
         // Set the days highlighted on top
         for (int i = 0; i < 7; i++) {
             ToggleButton day = (ToggleButton) daysOfWeek.getChildAt(i);
@@ -227,9 +258,6 @@ Log.i("days", event.weeklySchedule);
                 day.setChecked(true);
             }
         }
-
-
-
     }
 }
 
