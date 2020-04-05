@@ -183,8 +183,10 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
 
 }
 
+import java.nio.channels.InterruptedByTimeoutException;
+
 public class HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    Button add_event;
+    Button add_event, search_pub_event;
     TextView user_name;
 
     DrawerLayout drawer_layout;
@@ -198,8 +200,9 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         add_event = findViewById(R.id.add_event_btn);
         user_name = findViewById(R.id.name_of_user);
 
+        search_pub_event = findViewById(R.id.search_public_events_button);
 
-        // get logged in user's first name (saved during login), set name on top
+        // get logged in user's first name (saved during login)
         SharedPreferences userInfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String firstName = userInfo.getString("firstName", "");
         user_name.setText(firstName);
@@ -229,9 +232,20 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
         add_event.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-            Intent intent = new Intent(v.getContext(), CreateEvent.class);
-            startActivity(intent);
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(v.getContext(), CreateEvent.class);
+                startActivity(intent);
+            }
+        });
+
+        search_pub_event.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(v.getContext(), SearchingPublicEvent.class);
+                startActivity(intent);
             }
         });
     }
