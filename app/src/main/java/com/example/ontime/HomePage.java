@@ -45,146 +45,6 @@ import java.util.List;
 import java.util.Map;
 import java.nio.channels.InterruptedByTimeoutException;
 
-
-// TODO: Move these out of this file
-class Event implements Serializable {
-    int id;
-    int ownerId;
-    String eventName;
-    String startDate;
-    String endDate;
-    String time;
-    int repeatWeekly;
-    String weeklySchedule;  // binary string
-    String locationName;
-    Double lat;
-    Double lng;
-    String code;
-    String days;            // weekly schedule in days (Mon Tues etc)
-    Boolean isPrivate;
-    //number of attendees?
-    // PRIVATE OR PUBLIC
-
-
-    Event(int id, int ownerId, String eventName, String startDate, String endDate, String weeklySchedule, String time, int repeatWeekly, String locationName, Double lat, Double lng, String code, Boolean isPrivate) {
-        // convert weekly schedule from binary string to a list of days (1000110 -> Sun, Thu, Fri)
-        String days = "";
-        if (weeklySchedule.charAt(0) == '1') {
-            days += "Sun ";
-        }
-        if (weeklySchedule.charAt(1) == '1') {
-            days += "Mon ";
-        }
-        if (weeklySchedule.charAt(2) == '1') {
-            days += "Tue ";
-        }
-        if (weeklySchedule.charAt(3) == '1') {
-            days += "Wed ";
-        }
-        if (weeklySchedule.charAt(4) == '1') {
-            days += "Thu ";
-        }
-        if (weeklySchedule.charAt(5) == '1') {
-            days += "Fri ";
-        }
-        if (weeklySchedule.charAt(6) == '1') {
-            days += "Sat";
-        }
-
-        this.eventName = eventName;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        if (time.length() >5) {
-            time = time.substring(0, 5);
-            // Convert 24h time
-            int hours = Integer.parseInt(time.substring(0,2));
-            String minutes = time.substring(3,5);
-
-            // TODO: convert time correctly
-            if (hours > 12) {
-                time = (hours % 12) + ":" + minutes + " PM";
-            } else if (hours == 0 || hours == 12) {
-                time = "12:" + minutes + "PM";
-            } else {
-                time = hours + ":" + minutes + " AM";
-            }
-        }
-        this.time = time;
-        this.weeklySchedule = weeklySchedule;
-        this.days = days;
-        this.id = id;
-        this.ownerId = ownerId;
-        this.repeatWeekly = repeatWeekly;
-        this.locationName = locationName;
-        this.lat = lat;
-        this.lng = lng;
-        this.code = code;
-        this.isPrivate = isPrivate;
-    }
-}
-
-class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
-    List<Event> events;
-
-    RVAdapter(List<Event> events) {
-        this.events = events;
-    }
-
-    @Override
-    public EventViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item, viewGroup, false);
-        EventViewHolder evh = new EventViewHolder(v);
-        return evh;
-    }
-
-    @Override
-    public void onBindViewHolder(EventViewHolder eventViewHolder, final int i) {
-        eventViewHolder.eventName.setText(events.get(i).eventName);
-        //eventViewHolder.startDate.setText(events.get(i).startDate);
-        eventViewHolder.time.setText(events.get(i).time);
-        eventViewHolder.weeklySchedule.setText(events.get(i).days);
-        eventViewHolder.editEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent editEvent = new Intent(v.getContext(), EditEvent.class);
-                editEvent.putExtra("event", events.get(i));
-                v.getContext().startActivity(editEvent);
-            }
-        });
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    @Override
-    public int getItemCount() {
-        return events.size();
-    }
-
-    public static class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView editEvent;
-        CardView cv;
-        TextView eventName;
-        TextView startDate;
-        TextView time;
-        TextView weeklySchedule;
-
-        EventViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            eventName = (TextView)itemView.findViewById(R.id.eventName);
-            startDate = (TextView)itemView.findViewById(R.id.startDate);
-            time = (TextView)itemView.findViewById(R.id.time);
-            weeklySchedule = (TextView)itemView.findViewById(R.id.weeklySchedule);
-            editEvent = (TextView)itemView.findViewById(R.id.editEvent);
-        }
-    }
-
-}
-
-
 public class HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Button add_event, search_pub_event;
     TextView user_name;
@@ -215,9 +75,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         } else {
             setEvents(publicEventsString, privateEventsString);
         }
-        // TODO: add searchbar
         // TODO: make request to backend when homepage is loaded to get new events/event changes
-        // TODO: also update cache when events are edited or created?
 
         // Menu variables.
         drawer_layout = findViewById(R.id.drawer_layout);
@@ -251,7 +109,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     // populate the homepage with a list of the user's cached events
-    // TODO: figure out how often to update the user's events
     void setEvents(String publicEventsString, String privateEventsString) {
         RecyclerView eventsListView = findViewById(R.id.eventsList);
         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());

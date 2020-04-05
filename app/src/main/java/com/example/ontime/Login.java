@@ -85,7 +85,7 @@ public class Login extends AppCompatActivity {
 
         // Instantiate the RequestQueue ***
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://10.0.2.2:8080/api/login";
+        String url ="https://fair-hallway-265819.appspot.com/api/login";
 
         // Request a string response from the provided URL.
         JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, url, userInfo, new Response.Listener<JSONObject>() {

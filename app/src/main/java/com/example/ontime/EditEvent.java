@@ -151,9 +151,9 @@ public class EditEvent extends AppCompatActivity {
         Log.i("REQUEST", updatedEvent.toString());
         String url;
         if (event.isPrivate) {
-            url = "http://10.0.2.2:8080/api/events/private/edit";
+            url = "https://fair-hallway-265819.appspot.com/api/events/private/edit";
         } else {
-            url = "http://10.0.2.2:8080/api/events/public/edit";
+            url = "https://fair-hallway-265819.appspot.com/api/events/public/edit";
         }
 
         RequestQueue queue = Volley.newRequestQueue(this);
