@@ -110,7 +110,7 @@
             android:id="@+id/search_public_events_button"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/roundedcorner"
             android:text="Search Public Events"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -43,6 +43,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.nio.channels.InterruptedByTimeoutException;
 
 
 // TODO: Move these out of this file
@@ -183,7 +184,6 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
 
 }
 
-import java.nio.channels.InterruptedByTimeoutException;
 
 public class HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Button add_event, search_pub_event;
