@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
@@ -52,7 +53,7 @@ class Event implements Serializable {
     String startDate;
     String endDate;
     String time;
-    Boolean repeatWeekly;
+    int repeatWeekly;
     String weeklySchedule;  // binary string
     String locationName;
     Double lat;
@@ -64,7 +65,7 @@ class Event implements Serializable {
     // PRIVATE OR PUBLIC
 
 
-    Event(int id, int ownerId, String eventName, String startDate, String endDate, String weeklySchedule, String time, Boolean repeatWeekly, String locationName, Double lat, Double lng, String code, Boolean isPrivate) {
+    Event(int id, int ownerId, String eventName, String startDate, String endDate, String weeklySchedule, String time, int repeatWeekly, String locationName, Double lat, Double lng, String code, Boolean isPrivate) {
         // convert weekly schedule from binary string to a list of days (1000110 -> Sun, Thu, Fri)
         String days = "";
         if (weeklySchedule.charAt(0) == '1') {
@@ -88,11 +89,25 @@ class Event implements Serializable {
         if (weeklySchedule.charAt(6) == '1') {
             days += "Sat";
         }
-        String shortDate = startDate.substring(0,9);
 
         this.eventName = eventName;
-        this.startDate = shortDate;
+        this.startDate = startDate;
         this.endDate = endDate;
+        if (time.length() >5) {
+            time = time.substring(0, 5);
+            // Convert 24h time
+            int hours = Integer.parseInt(time.substring(0,2));
+            String minutes = time.substring(3,5);
+
+            // TODO: convert time correctly
+            if (hours > 12) {
+                time = (hours % 12) + ":" + minutes + " PM";
+            } else if (hours == 0 || hours == 12) {
+                time = "12:" + minutes + "PM";
+            } else {
+                time = hours + ":" + minutes + " AM";
+            }
+        }
         this.time = time;
         this.weeklySchedule = weeklySchedule;
         this.days = days;
@@ -124,10 +139,10 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
     @Override
     public void onBindViewHolder(EventViewHolder eventViewHolder, final int i) {
         eventViewHolder.eventName.setText(events.get(i).eventName);
-        eventViewHolder.startDate.setText(events.get(i).startDate);
+        //eventViewHolder.startDate.setText(events.get(i).startDate);
         eventViewHolder.time.setText(events.get(i).time);
         eventViewHolder.weeklySchedule.setText(events.get(i).days);
-        eventViewHolder.eventName.setOnClickListener(new View.OnClickListener() {
+        eventViewHolder.editEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent editEvent = new Intent(v.getContext(), EditEvent.class);
@@ -148,6 +163,7 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
     }
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
+        TextView editEvent;
         CardView cv;
         TextView eventName;
         TextView startDate;
@@ -161,6 +177,7 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
             startDate = (TextView)itemView.findViewById(R.id.startDate);
             time = (TextView)itemView.findViewById(R.id.time);
             weeklySchedule = (TextView)itemView.findViewById(R.id.weeklySchedule);
+            editEvent = (TextView)itemView.findViewById(R.id.editEvent);
         }
     }
 
@@ -187,52 +204,14 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         String firstName = userInfo.getString("firstName", "");
         user_name.setText(firstName);
 
+        String privateEventsString = userInfo.getString("privateEvents", null);
+        String publicEventsString = userInfo.getString("publicEvents", null);
 
-        // populate the list view with user's cached events
-        RecyclerView eventsListView = findViewById(R.id.eventsList);
-        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-        eventsListView.setLayoutManager(llm);
-
-        String eventsString = userInfo.getString("privateEvents", null);
-
-        JSONArray eventsList = new JSONArray();
-        try {
-            eventsList = new JSONArray(eventsString);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (publicEventsString == null && privateEventsString == null) {
+            Toast.makeText(getApplicationContext(),"There was an error loading your events.", Toast. LENGTH_SHORT).show();
+        } else {
+            setEvents(publicEventsString, privateEventsString);
         }
-
-        List<Event> eventList = new ArrayList<>();
-        for (int i=0; i < eventsList.length(); i++) {
-            JSONObject event = null;
-            try {
-                event = (JSONObject) eventsList.get(i);
-                //create an Event object
-                String eventName = event.getString("eventName");
-                String startDate = event.getString("startDate");
-                String weeklySchedule = event.getString("weeklySchedule");
-                String time = event.getString("time");
-                int id = event.getInt("id");
-                int ownerId = event.getInt("ownerId");
-                //Boolean repeatWeekly = (Boolean) event.getBoolean("repeatWeekly");
-                Boolean repeatWeekly = true;
-                String locationName = event.getString("locationName");
-                Double lat = event.getDouble("lat");
-                Double lng = event.getDouble("lng");
-                String code = event.getString("code");
-                String endDate = event.getString("endDate");
-                eventList.add(new Event(id, ownerId, eventName, startDate, endDate, weeklySchedule, time, repeatWeekly, locationName, lat, lng, code, true));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            Log.i("EVENT", event.toString());
-
-        }
-
-        RVAdapter adapter = new RVAdapter(eventList);
-        eventsListView.setAdapter(adapter);
-
-        // TODO: format list items
         // TODO: add searchbar
         // TODO: make request to backend when homepage is loaded to get new events/event changes
         // TODO: also update cache when events are edited or created?
@@ -255,6 +234,79 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             startActivity(intent);
             }
         });
+    }
+
+    // populate the homepage with a list of the user's cached events
+    // TODO: figure out how often to update the user's events
+    void setEvents(String publicEventsString, String privateEventsString) {
+        RecyclerView eventsListView = findViewById(R.id.eventsList);
+        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+        eventsListView.setLayoutManager(llm);
+
+
+        JSONArray privateEventsList = new JSONArray();
+        JSONArray publicEventsList = new JSONArray();
+
+        try {
+            privateEventsList = new JSONArray(privateEventsString);
+            publicEventsList = new JSONArray(publicEventsString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        List<Event> eventList = new ArrayList<>();
+        // put private events into eventList
+        for (int i=0; i < privateEventsList.length(); i++) {
+            JSONObject event = null;
+            try {
+                event = (JSONObject) privateEventsList.get(i);
+                //create an Event object
+                String eventName = event.getString("eventName");
+                String startDate = event.getString("startDate");
+                String weeklySchedule = event.getString("weeklySchedule");
+                String time = event.getString("time");
+                int id = event.getInt("id");
+                int ownerId = event.getInt("ownerId");
+                int repeatWeekly =  event.getInt("repeatWeekly");
+                String locationName = event.getString("locationName");
+                Double lat = event.getDouble("lat");
+                Double lng = event.getDouble("lng");
+                String code = event.getString("code");
+                String endDate = event.getString("endDate");
+                eventList.add(new Event(id, ownerId, eventName, startDate, endDate, weeklySchedule, time, repeatWeekly, locationName, lat, lng, code, true));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.i("EVENT", event.toString());
+        }
+
+        // put public events into list
+        for (int i=0; i < publicEventsList.length(); i++) {
+            JSONObject event = null;
+            try {
+                event = (JSONObject) publicEventsList.get(i);
+                //create an Event object
+                String eventName = event.getString("eventName");
+                String startDate = event.getString("startDate");
+                String weeklySchedule = event.getString("weeklySchedule");
+                String time = event.getString("time");
+                int id = event.getInt("id");
+                int ownerId = event.getInt("ownerId");
+                int repeatWeekly =  event.getInt("repeatWeekly");
+                String locationName = event.getString("locationName");
+                Double lat = event.getDouble("lat");
+                Double lng = event.getDouble("lng");
+                String code = event.getString("code");
+                String endDate = event.getString("endDate");
+                eventList.add(new Event(id, ownerId, eventName, startDate, endDate, weeklySchedule, time, repeatWeekly, locationName, lat, lng, code, false));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.i("EVENT", event.toString());
+        }
+
+        RVAdapter adapter = new RVAdapter(eventList);
+        eventsListView.setAdapter(adapter);
     }
 
     public void logout() {

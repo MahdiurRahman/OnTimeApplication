@@ -102,9 +102,11 @@ public class Login extends AppCompatActivity {
                         JSONObject userJSON = (JSONObject) response.get("user");
                         JSONObject userEvents = (JSONObject) response.get("events");
                         JSONArray privateEventsList = userEvents.getJSONArray("private");
+                        JSONArray publicEventsList = userEvents.getJSONArray("public");
 
                         // Convert the array of event objects into a string so that it can be stored in SharedPreferences
-                        String events = privateEventsList.toString();
+                        String privateEvents = privateEventsList.toString();
+                        String publicEvents = publicEventsList.toString();
 
                         String firstName = userInfoJSON.get("firstName").toString();
                         String lastName = userInfoJSON.get("lastName").toString();
@@ -116,8 +118,8 @@ public class Login extends AppCompatActivity {
                         userInfoEditor.putString("lastName", lastName);
                         userInfoEditor.putString("lastName", lastName);
                         userInfoEditor.putString("id", id);
-                        userInfoEditor.putString("privateEvents", events);
-                        //public events
+                        userInfoEditor.putString("privateEvents", privateEvents);
+                        userInfoEditor.putString("publicEvents", publicEvents);
                         userInfoEditor.commit();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -129,13 +131,13 @@ public class Login extends AppCompatActivity {
 
                 // Wrong credentials
                 else if (response.has("authError")) {
-                    Toast wrongCredentials = Toast. makeText(getApplicationContext(),"Wrong username or password.", Toast. LENGTH_SHORT);
+                    Toast wrongCredentials = Toast.makeText(getApplicationContext(),"Wrong username or password.", Toast. LENGTH_SHORT);
                     wrongCredentials.show();
                 }
 
                 // Login error (backend issue)
                 else {
-                    Toast error = Toast. makeText(getApplicationContext(),"There was an error logging in.", Toast. LENGTH_SHORT);
+                    Toast error = Toast.makeText(getApplicationContext(),"There was an error logging in.", Toast. LENGTH_SHORT);
                     error.show();
                 }
 

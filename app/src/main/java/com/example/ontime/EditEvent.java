@@ -26,6 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -84,7 +85,7 @@ public class EditEvent extends AppCompatActivity {
 
         // Get value from each input and put into json object
         // Put user's info into a JSON object
-        final JSONObject newEvent = new JSONObject();
+        final JSONObject updatedEvent = new JSONObject();
         SharedPreferences userInfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Event event = (Event) getIntent().getSerializableExtra("event");
 
@@ -98,7 +99,8 @@ public class EditEvent extends AppCompatActivity {
             if (startDate.getText().toString() != event.startDate) {
                 changes.put("startDate", startDate.getText().toString());
             }
-            if (repeatWeeklySwitch.isChecked() != event.repeatWeekly) {
+            Boolean repeatWeekly = event.repeatWeekly == 1 ? true : false;
+            if (repeatWeeklySwitch.isChecked() != repeatWeekly) {
                 changes.put("repeatWeekly", repeatWeeklySwitch.isChecked());
             }
             String eventDays = getEventDays();
@@ -111,8 +113,8 @@ public class EditEvent extends AppCompatActivity {
             if (eventLocation.getText().toString() != event.locationName) {
                 changes.put("locationName", eventLocation.getText().toString());
                 // TODO: if location is updated, lat and lng should be too
-                //newEvent.put("lat", 1);
-                //newEvent.put("lng", 1);
+                //updatedEvent.put("lat", 1);
+                //updatedEvent.put("lng", 1);
             }
 
             if (endDate.getText().toString() != event.endDate) {
@@ -135,36 +137,60 @@ public class EditEvent extends AppCompatActivity {
         // event location
         // Temporary values until google api is implemented
 
-        //newEvent.put("startLat", 1);
-        //newEvent.put("startLng", 1);
+        //updatedEvent.put("startLat", 1);
+        //updatedEvent.put("startLng", 1);
 
         try {
             String id = userInfo.getString("id", "0");
-            newEvent.put("ownerId", id);
-            newEvent.put("eventId", id);
-            newEvent.put("changes", changes);
+            updatedEvent.put("ownerId", id);
+            updatedEvent.put("eventId", event.id);
+            updatedEvent.put("changes", changes);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.i("REQUEST", updatedEvent.toString());
         String url;
-        // TODO: This needs to change, it should look at if the event is public or private already
         if (event.isPrivate) {
-            url = "http://10.0.2.2:8080/api/events/public/edit";
-        } else {
             url = "http://10.0.2.2:8080/api/events/private/edit";
+        } else {
+            url = "http://10.0.2.2:8080/api/events/public/edit";
         }
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
         // Request a string response from the provided URL.
-        JsonObjectRequest createEventRequest = new JsonObjectRequest(Request.Method.POST, url, newEvent, new Response.Listener<JSONObject>() {
+        JsonObjectRequest createEventRequest = new JsonObjectRequest(Request.Method.PUT, url, updatedEvent, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.i("Success", "" + response.toString());
 
                 // Event created successfully
-                if (response.has("ownerId")) {
+                if (response.has("publicEvents") || response.has("privateEvents")) {
+                    // update cached events list
+                    //TODO: do this for CreateEvent as well
+                    SharedPreferences userInfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor userInfoEditor = userInfo.edit();
+
+                    JSONArray eventsList;
+                    if (response.has("publicEvents")) {
+                        try {
+                            eventsList = response.getJSONArray("publicEvents");
+                            userInfoEditor.putString("publicEvents", eventsList.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            eventsList = response.getJSONArray("privateEvents");
+                            userInfoEditor.putString("privateEvents", eventsList.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    userInfoEditor.commit();
+
+
                     // Redirect to the HomePage
                     Intent intent = new Intent(EditEvent.this, HomePage.class);
                     startActivity(intent);
@@ -172,7 +198,7 @@ public class EditEvent extends AppCompatActivity {
 
                 // Error
                 else {
-                    Toast error = Toast.makeText(getApplicationContext(), "There was an error creating the event.", Toast.LENGTH_SHORT);
+                    Toast error = Toast.makeText(getApplicationContext(), "There was an error updating the event.", Toast.LENGTH_SHORT);
                     error.show();
                 }
             }
@@ -231,24 +257,34 @@ public class EditEvent extends AppCompatActivity {
     private void setFormFields() {
         // Get the event object passed to the activity
         Event event = (Event) getIntent().getSerializableExtra("event");
-        Log.i("event", event.eventName);
+        Log.i("event", event.isPrivate.toString());
 
         // Set each field in the form with the current values for the event
         name.setText(event.eventName);
 
         startDate.setText(event.startDate);
         endDate.setText(event.endDate);
-        startTime.setText(event.time);
+        String time = event.time;
+        if (time.length() >= 5) {
+            time = event.time.substring(0,5) + ":00";
+        }
+        startTime.setText(time);
+
+
         eventLocation.setText(event.locationName);
 
         //alarmSound
         // TODO: change event to private or public
         //startLocationName.setText(event.startLocation);
 
-        // TODO: I think this is broken
-        if (event.repeatWeekly == true) {
+        if (event.repeatWeekly == 1) {
             repeatWeeklySwitch.setChecked(true);
+        } else {
+            repeatWeeklySwitch.setChecked(false);
         }
+
+        // if event is public switch should be checked
+        publicPrivateSwitch.setChecked(!event.isPrivate);
 
         Log.i("days", event.weeklySchedule);
         // Set the days highlighted on top

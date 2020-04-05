@@ -4,12 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/cv"
+    android:layout_marginBottom="15dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#cd252d"
+        android:background="#ffffff"
         android:padding="16dp">
 
         <TextView
@@ -17,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/startDate"
@@ -25,23 +28,30 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/eventName"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/startDate"
-            android:textSize="15sp" />
+            android:layout_alignParentRight="true"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/editEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/time"
+            android:layout_alignParentRight="true"
 
+            android:text="Edit"
+            android:textSize="20sp" />
         <TextView
             android:id="@+id/weeklySchedule"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/time"
-            android:textSize="15sp" />
+            android:layout_below="@+id/eventName"
+            android:textSize="20sp" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
