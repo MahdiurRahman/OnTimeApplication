@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".EditEvent"></activity>
         <activity android:name=".SearchingPublicEvent"></activity>
         <activity android:name=".PrivateEvents" />
         <activity android:name=".PublicEvents" />

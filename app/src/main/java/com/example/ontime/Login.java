@@ -23,11 +23,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.prefs.PreferenceChangeEvent;
 
 public class Login extends AppCompatActivity {
@@ -96,6 +100,14 @@ public class Login extends AppCompatActivity {
                     try {
                         JSONObject userInfoJSON = (JSONObject) response.get("userInfo");
                         JSONObject userJSON = (JSONObject) response.get("user");
+                        JSONObject userEvents = (JSONObject) response.get("events");
+                        JSONArray privateEventsList = userEvents.getJSONArray("private");
+                        JSONArray publicEventsList = userEvents.getJSONArray("public");
+
+                        // Convert the array of event objects into a string so that it can be stored in SharedPreferences
+                        String privateEvents = privateEventsList.toString();
+                        String publicEvents = publicEventsList.toString();
+
                         String firstName = userInfoJSON.get("firstName").toString();
                         String lastName = userInfoJSON.get("lastName").toString();
                         String id = userJSON.get("id").toString();
@@ -106,6 +118,8 @@ public class Login extends AppCompatActivity {
                         userInfoEditor.putString("lastName", lastName);
                         userInfoEditor.putString("lastName", lastName);
                         userInfoEditor.putString("id", id);
+                        userInfoEditor.putString("privateEvents", privateEvents);
+                        userInfoEditor.putString("publicEvents", publicEvents);
                         userInfoEditor.commit();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -117,13 +131,13 @@ public class Login extends AppCompatActivity {
 
                 // Wrong credentials
                 else if (response.has("authError")) {
-                    Toast wrongCredentials = Toast. makeText(getApplicationContext(),"Wrong username or password.", Toast. LENGTH_SHORT);
+                    Toast wrongCredentials = Toast.makeText(getApplicationContext(),"Wrong username or password.", Toast. LENGTH_SHORT);
                     wrongCredentials.show();
                 }
 
                 // Login error (backend issue)
                 else {
-                    Toast error = Toast. makeText(getApplicationContext(),"There was an error logging in.", Toast. LENGTH_SHORT);
+                    Toast error = Toast.makeText(getApplicationContext(),"There was an error logging in.", Toast. LENGTH_SHORT);
                     error.show();
                 }
 

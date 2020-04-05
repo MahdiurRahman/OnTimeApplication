@@ -32,6 +32,18 @@ import org.json.JSONObject;
 import java.util.Map;
 
 public class CreateEvent extends AppCompatActivity {
+    EditText name;
+    EditText startLocationName;
+    EditText startDate;
+    EditText endDate;
+    EditText startTime;
+    EditText eventLocation;
+    EditText alarmSound;
+    //EditText vibration;
+    Switch publicPrivateSwitch;
+    Switch repeatWeeklySwitch;
+
+
     public void cancelCreateEvent(View view) {
         // navigate back to homepage
         Intent intent = new Intent(this, HomePage.class);
@@ -62,16 +74,6 @@ public class CreateEvent extends AppCompatActivity {
     }
 
     public void createEvent() {
-        EditText name = (EditText) findViewById(R.id.createEventName);
-        EditText startLocationName = (EditText) findViewById(R.id.createEventStartLocation);
-        EditText startDate = (EditText) findViewById(R.id.createEventStartDate);
-        EditText endDate = (EditText) findViewById(R.id.createEventEndDate);
-        EditText startTime = (EditText) findViewById(R.id.createEventStartTime);
-        EditText eventLocation = (EditText) findViewById(R.id.createEventLocation);
-        EditText alarmSound = (EditText) findViewById(R.id.createEventAlarm);
-        //EditText vibration = (EditText) findViewById(R.id.createEventVibration);
-        Switch publicPrivateSwitch = (Switch) findViewById(R.id.publicPrivateSwitch);
-        Switch repeatWeeklySwitch = (Switch) findViewById(R.id.repeatWeeklySwitch);
 
         // TODO: add validation for form, select different input types for form
         // TODO: add map
@@ -81,10 +83,12 @@ public class CreateEvent extends AppCompatActivity {
         // Put user's info into a JSON object
         final JSONObject newEvent = new JSONObject();
         SharedPreferences userInfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+/*      See what is in the userInfo object in sharedPreferences
         Map<String, ?> allEntries = userInfo.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
         }
+  */
         String id = userInfo.getString("id", "0");
         Log.i("USER'S ID", id);
 
@@ -99,16 +103,11 @@ public class CreateEvent extends AppCompatActivity {
             newEvent.put("time", startTime.getText().toString());
             newEvent.put("startLocationName", startLocationName.getText().toString());
             newEvent.put("locationName", eventLocation.getText().toString());               // event location
-            // Temporary values until google api is implemented
+            // Temporary values until google api is incorporated
             newEvent.put("lat", 1);
             newEvent.put("lng", 1);
             newEvent.put("startLat", 1);
             newEvent.put("startLng", 1);
-            // lat
-            // lng
-            // TODO: save user's start location (will be saved for the event creator only)
-            // will be different for user / event creator
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -167,6 +166,18 @@ public class CreateEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
         Button createEvent = findViewById(R.id.createEventBtn);
+
+        name = (EditText) findViewById(R.id.createEventName);
+        startLocationName = (EditText) findViewById(R.id.createEventStartLocation);
+        startDate = (EditText) findViewById(R.id.createEventStartDate);
+        endDate = (EditText) findViewById(R.id.createEventEndDate);
+        startTime = (EditText) findViewById(R.id.createEventStartTime);
+        eventLocation = (EditText) findViewById(R.id.createEventLocation);
+        alarmSound = (EditText) findViewById(R.id.createEventAlarm);
+        //vibration = (EditText) findViewById(R.id.createEventVibration);
+        publicPrivateSwitch = (Switch) findViewById(R.id.publicPrivateSwitch);
+        repeatWeeklySwitch = (Switch) findViewById(R.id.repeatWeeklySwitch);
+
 
         createEvent.setOnClickListener(new View.OnClickListener() {
             @Override

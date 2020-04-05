@@ -51,7 +51,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.082" />
+            app:layout_constraintVertical_bias="0.082"
+            />
 
         <TextView
             android:id="@+id/name_of_user"
@@ -94,11 +95,22 @@
             app:layout_constraintVertical_bias="0.038"
             app:srcCompat="@drawable/settings_icon" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/eventsList"
+            android:layout_width="414dp"
+            android:layout_height="481dp"
+            android:layout_marginTop="35dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/your_events">
+
+        </androidx.recyclerview.widget.RecyclerView>
         <Button
             android:id="@+id/search_public_events_button"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/roundedcorner"
             android:text="Search Public Events"
             app:layout_constraintBottom_toBottomOf="parent"
